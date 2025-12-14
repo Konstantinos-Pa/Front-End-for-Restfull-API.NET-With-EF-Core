@@ -1,49 +1,89 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <a class="navbar-brand fw-bold text-white" href="#">MyWebsite</a>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <!-- Logo -->
+      <RouterLink class="navbar-brand" to="/">
+        <img :src="Logo" alt="PeopleCert Logo" class="logo">
+      </RouterLink>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <!-- Toggle for mobile -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Certificates</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-      </ul>
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-center">
+          <li class="nav-item">
+            <RouterLink class="nav-link active" to="/certificates">Certificates</RouterLink>
+          </li>
+
+          <li class="nav-item">
+            <RouterLink class="nav-link active" to="/about">About</RouterLink>
+          </li>
+
+          <!-- Profile Dropdown -->
+          <li class="nav-item dropdown ms-3">
+            <a
+              class="nav-link dropdown-toggle p-0"
+              href="#"
+              id="profileDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-person-circle profile-icon"></i>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <li>
+                <RouterLink class="dropdown-item" to="/profile">Profile Details</RouterLink>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <RouterLink class="dropdown-item text-danger" href="#">Log Out</RouterLink>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 </template>
 
-<script setup></script>
+<script setup>
+import { routeLocationKey } from 'vue-router';
+import Logo from '../icons/Logo-PC_w-2-2-af2b9084eda04389b2e6064009ed3fe51.png'
+</script>
 
 <style scoped>
-.header {
-  background: #1a1a1a;
-  color: white;
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .logo {
-  font-size: 22px;
-  font-weight: bold;
+  height: 40px;
 }
 
-.nav a {
-  color: white;
-  text-decoration: none;
-  margin-left: 25px;
-  font-size: 16px;
+.profile-icon {
+  font-size: 38px;
 }
 
-.nav a:hover {
-  color: #0d6efd;
+a.show .profile-icon {
+  color: #FF3200;
+}
+
+.active:active{
+  color: #FF3200;
+}
+
+.dropdown-menu {
+  min-width: 180px;
 }
 </style>
