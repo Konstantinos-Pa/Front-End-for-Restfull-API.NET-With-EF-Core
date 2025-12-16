@@ -1,76 +1,105 @@
 <template>
   <div class="Grey-Background">
     <div class="Content-box">
-        <div class="flexbox">
-            <div class="img-container ">
-                <img :src=Main alt="Business woman using tablet" class="img"></img>
+            <h1>Main</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
             </div>
-            <div class="text-container">
-                <p id="welcome1">Welcome to Our Exam Platform </p>
-
-                <p id="welcome2">Welcome to our online examination platform, your trusted space for learning, practice, and assessment. Whether you are preparing for an upcoming exam, testing your knowledge, or tracking your progress, our platform is designed to support you every step of the way.</p>
-
-                <p id="welcome2">Access a wide range of exams, practice questions, and results in a secure and user-friendly environment. Stay focused, stay confident, and take the next step toward achieving your goals.</p>
-
-                <p id="welcome3">Get started by selecting an exam and begin your journey today.</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h1>Hello</h1>
+                    </div>
+                </div>
+            </div>
     </div>
   </div>
 </template>
 
-<script setup>
-    import Main from "../icons/portrait-successful-business-woman-using-digital-tablet.jpg"
-</script>
+
 
 <style scoped>
   
     .Grey-Background{
       background-color: #CBCBCB;
-      padding: 5.694vw;
+      padding: 82px;
     }
     .Content-box{
         background-color: white;
         border-radius: 10px;
-        overflow: hidden;
-    }
-    .flexbox{
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: center;
-        align-items: center; 
-     }
-
-     .img-container {
-        width: 50vw;
-        height: 40vw;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-
-    .img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    
-    .text-container {
-        font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
-        flex: 1 1 550px;
-        padding:3.33vw;
-    }
-
-    #welcome1{
-        font-size: 32px;
-        font-weight: bold;
-    }
-
-    #welcome2{
-        font-size: 15px;
-    }
-
-    #welcome3{
-        font-size: 24px;
     }
 </style>

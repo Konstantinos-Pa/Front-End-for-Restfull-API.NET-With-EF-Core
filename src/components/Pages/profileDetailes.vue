@@ -12,11 +12,10 @@
     
     .Grey-Background{
       background-color: #CBCBCB;
-      padding: 5.694vw;
+      padding: 82px;
     }
     .Content-box{
         background-color: white;
         border-radius: 10px;
-        overflow: hidden;
     }
 </style>
