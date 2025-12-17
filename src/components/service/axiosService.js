@@ -20,7 +20,6 @@ export default {
   async getAllCertificates() {
     try {
       const response = await apiClient.get('/Certificates');
-      console.log('Token:', token);
       return response;
     } catch (error) {
       console.error('Error fetching certificates:', error);
@@ -32,7 +31,16 @@ export default {
       const response = await apiClient.post('/Account/login',item);
       return response;
     } catch (error) {
-      console.error('Error fetching certificates:', error);
+      console.error('Error fetching Login:', error);
+      throw error;
+    }
+  },
+  async Register(item) {
+    try {
+      const response = await apiClient.post('/Account/register',item);
+      return response;
+    } catch (error) {
+      console.error('Error fetching Register:', error);
       throw error;
     }
   },
