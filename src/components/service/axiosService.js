@@ -44,5 +44,42 @@ export default {
       throw error;
     }
   },
+  async getCandidateList() {
+    try {
+      const response = await apiClient.get('/Candidates');
+      return response;
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+      throw error;
+    }
+  },
+  async createCandidate(candidateData) {
+    try {
+      const response = await apiClient.post('/Candidates', candidateData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating candidate:', error);
+      throw error;
+    }
+
+  },
+  async putCandidate(candidateId, candidateData) {
+    try {
+      const response = await apiClient.put(`/Candidates/${candidateId}`, candidateData);
+      return response;
+    } catch (error) {
+      console.error('Error updating candidate:', error);
+      throw error;
+    }
+  },
+  async getCertificatesOfCandidate(id) {
+    try {
+      const response = await apiClient.get(`Candidates/CertificatesOfCandidate/${id}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
+      throw error;
+    }
+  }
 };
 

@@ -5,6 +5,8 @@ import Certificates from '@/components/Pages/certificates.vue'
 import ProfileDetailes from '@/components/Pages/profileDetailes.vue'
 import Login from '@/components/Pages/login.vue'
 import Register from '@/components/Pages/Register.vue'
+import CandidateList from '../components/Pages/CandidateList.vue'
+import NewCandidate from '@/components/Pages/NewCandidate.vue'
 
 
 const router = createRouter({
@@ -39,6 +41,16 @@ const router = createRouter({
       path: '/Register',
       name: 'Register',
       component: Register,
+    },
+    {
+      path: '/candidateList',
+      component: CandidateList,
+      name: 'CandidateList',
+    },
+    {
+      path: '/candidatelist/newcandidate',
+      component: NewCandidate,
+      name: 'NewCandidate',
     },
   ],
 })
