@@ -22,7 +22,7 @@
                                     {{ showpassword ? 'Hide' : 'Show' }}
                                 </button>
                             </div>
-
+                            <p class="text-danger">{{ errorResponce }}</p>
                             <a href="#" class="forgot-password">Forget your password</a>
 
                             <button type="submit" class="btn w-100 login-btn" :disabled="!canLogin">Log in</button>
@@ -44,6 +44,7 @@ export default {
             password: '',
             username: '',
             token: '',
+            errorResponce: ''
         }
     },
     computed: {
@@ -64,11 +65,15 @@ export default {
             try {
                 const response = await axiosService.Login(payload);
                 this.token = response.data;
-                console.log('Token:', this.token);
                 localStorage.setItem('token', this.token);
+                if (this.token) {
+                    this.$router.push('/').then(() => {
+                        window.location.reload(); // reload the page if really needed
+                    });
+                }
             }
             catch (error) {
-                console.error('Failed to fetch certificates:', error);
+                this.errorResponce = Object.values(error.response.data)[0][0];
             }
             finally {
                 this.loading = false;

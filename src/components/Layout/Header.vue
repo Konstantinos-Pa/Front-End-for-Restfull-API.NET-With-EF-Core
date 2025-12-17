@@ -27,12 +27,12 @@
             <RouterLink class="nav-link active" to="/about">About</RouterLink>
           </li>
 
-          <li class="nav-item">
+          <li v-if="isTokenEmpty" class="nav-item">
             <RouterLink class="nav-link active" to="/login">Login</RouterLink>
           </li>
 
           <!-- Profile Dropdown -->
-          <li class="nav-item dropdown ms-3">
+          <li v-else class="nav-item dropdown ms-3">
             <a
               class="nav-link dropdown-toggle p-0"
               href="#"
@@ -50,7 +50,7 @@
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <RouterLink class="dropdown-item text-danger" href="#">Log Out</RouterLink>
+                <button class="dropdown-item text-danger" @click="logout">Log Out</button>
               </li>
             </ul>
           </li>
@@ -60,8 +60,31 @@
   </nav>
 </template>
 
-<script setup>
+<script>
 import Logo from '../icons/Logo-PC.png'
+
+export default {
+  data() {
+    return { 
+      token : localStorage.getItem('token') || '',
+      Logo  // <-- Make the imported Logo available here
+    };
+  },
+  computed: {
+    isTokenEmpty() {
+      return !this.token;
+    },
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('token');
+      this.token = ''; // make reactive
+      this.$router.push('/').then(() => {
+        window.location.reload(); // reload the page if really needed
+      });
+    }
+  }
+}
 </script>
 
 <style scoped>
