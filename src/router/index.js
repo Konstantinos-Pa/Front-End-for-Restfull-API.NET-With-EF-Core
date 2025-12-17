@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../components/Pages/Main.vue'
-import About from '../components/Pages/about.vue'
-import Certificates from '../components/Pages/certificates.vue'
+import HomeView from '@/components/Pages/Main.vue'
+import About from '@/components/Pages/about.vue'
+import Certificates from '@/components/Pages/certificates.vue'
 import ProfileDetailes from '@/components/Pages/profileDetailes.vue'
+import Login from '@/components/Pages/login.vue'
 
 
 const router = createRouter({
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/profile',
       name: 'ProfileDetails',
       component: ProfileDetailes,
+    },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: Login,
     },
   ],
 })

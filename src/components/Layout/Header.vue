@@ -27,6 +27,10 @@
             <RouterLink class="nav-link active" to="/about">About</RouterLink>
           </li>
 
+          <li class="nav-item">
+            <RouterLink class="nav-link active" to="/login">Login</RouterLink>
+          </li>
+
           <!-- Profile Dropdown -->
           <li class="nav-item dropdown ms-3">
             <a
@@ -57,8 +61,7 @@
 </template>
 
 <script setup>
-import { routeLocationKey } from 'vue-router';
-import Logo from '../icons/Logo-PC_w-2-2-af2b9084eda04389b2e6064009ed3fe51.png'
+import Logo from '../icons/Logo-PC.png'
 </script>
 
 <style scoped>
