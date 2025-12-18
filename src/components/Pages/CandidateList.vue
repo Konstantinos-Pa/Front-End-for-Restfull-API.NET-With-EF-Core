@@ -16,7 +16,6 @@
 
     <!-- Header -->
     <div class="list-header">
-      <span>User Name</span>
       <span>First Name</span>
       <span>Last Name</span>
       <span>Email</span>
@@ -33,7 +32,6 @@
         class="list-row"
         @click="openCandidate(candidate)"
       >
-        <span>{{ candidate.userName }}</span>
         <span>{{ candidate.firstName }}</span>
         <span>{{ candidate.lastName }}</span>
         <span>{{ candidate.email }}</span>
@@ -185,7 +183,7 @@ export default {
 /* ================= HEADER ================= */
 .list-header {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   text-align: center;
   padding: 12px 16px;
   font-weight: 600;
@@ -208,7 +206,7 @@ export default {
 
 .list-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   text-align: center;
   background: #fff;
   border: 1px solid #ddd;

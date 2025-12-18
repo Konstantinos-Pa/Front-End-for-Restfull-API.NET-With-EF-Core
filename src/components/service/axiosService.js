@@ -80,6 +80,15 @@ export default {
       console.error('Error fetching certificates:', error);
       throw error;
     }
-  }
+  },
+  async getCandidateByUserName(username) {
+    try {
+      const response = await apiClient.get(`/Candidates/${username}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+      throw error;
+    }
+  },
 };
 

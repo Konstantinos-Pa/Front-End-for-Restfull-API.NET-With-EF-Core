@@ -16,7 +16,6 @@
     <div v-if="activeTab === 'details'">
       <!-- VIEW MODE -->
       <div v-if="!isEditing" class="grid">
-        <div class="row"><span>User Name</span><span>{{ candidate.userName }}</span></div>
         <div class="row"><span>First Name</span><span>{{ candidate.firstName }}</span></div>
         <div class="row"><span>Middle Name</span><span>{{ candidate.middleName }}</span></div>
         <div class="row"><span>Last Name</span><span>{{ candidate.lastName }}</span></div>
@@ -24,7 +23,7 @@
         <div class="row"><span>Date of Birth</span><span>{{ candidate.dateOfBirth }}</span></div>
         <div class="row"><span>Email</span><span>{{ candidate.email }}</span></div>
         <div class="row"><span>Native Language</span><span>{{ candidate.nativeLanguage }}</span></div>
-        <div class="row full-width"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
+        <div class="row"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
 
         <div class="actions">
           <button class="btn edit" @click="startEdit">Edit Candidate</button>
@@ -33,10 +32,6 @@
 
       <!-- EDIT MODE -->
       <form v-else class="grid" @submit.prevent="saveChanges">
-        <div class="row">
-          <span>User Name</span>
-          <input v-model="editableCandidate.userName" required />
-        </div>
 
         <div class="row">
           <span>First Name</span>
@@ -77,7 +72,7 @@
             maxlength="50" required>
         </div>
 
-        <div class="row full-width">
+        <div class="row">
           <span>Phone Number</span>
           <input type="tel" v-model="editableCandidate.phoneNumber" pattern="[0-9]{10}" required />
         </div>
