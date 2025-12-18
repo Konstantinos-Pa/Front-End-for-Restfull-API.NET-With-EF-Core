@@ -24,6 +24,9 @@
                             </div>
                             <p class="text-danger">{{ errorResponce }}</p>
                             <a href="#" class="forgot-password">Forget your password</a>
+                            <p>Not a member?  Register 
+                                <RouterLink to="/Register">Here</RouterLink>
+                            </p>
 
                             <button type="submit" class="btn w-100 login-btn" :disabled="!canLogin">Log in</button>
                         </form>
@@ -64,7 +67,7 @@ export default {
             };
             try {
                 const response = await axiosService.Login(payload);
-                this.token = response.data;
+                this.token = response.data.token.result;
                 localStorage.setItem('token', this.token);
                 if (this.token) {
                     this.$router.push('/').then(() => {

@@ -7,12 +7,7 @@
       </RouterLink>
 
       <!-- Toggle for mobile -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -20,7 +15,11 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav align-items-center">
           <li class="nav-item">
-            <RouterLink class="nav-link active" to="/certificates">Certificates</RouterLink>
+            <RouterLink v-if="['Administrator'].includes(parsed?.role)" class="nav-link active" to="/candidateList">Candidates List</RouterLink>
+          </li>
+
+          <li class="nav-item">
+            <RouterLink v-if="['User', 'Administrator'].includes(parsed?.role)" class="nav-link active" to="/certificates">Certificates</RouterLink>
           </li>
 
           <li class="nav-item">
@@ -33,14 +32,8 @@
 
           <!-- Profile Dropdown -->
           <li v-else class="nav-item dropdown ms-3">
-            <a
-              class="nav-link dropdown-toggle p-0"
-              href="#"
-              id="profileDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle p-0" href="#" id="profileDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle profile-icon"></i>
             </a>
 
@@ -48,7 +41,9 @@
               <li>
                 <RouterLink class="dropdown-item" to="/profile">Profile Details</RouterLink>
               </li>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li>
                 <button class="dropdown-item text-danger" @click="logout">Log Out</button>
               </li>
@@ -60,37 +55,53 @@
   </nav>
 </template>
 
+
 <script>
 import Logo from '../icons/Logo-PC.png'
 
 export default {
   data() {
-    return { 
-      token : localStorage.getItem('token') || '',
-      Logo  // <-- Make the imported Logo available here
+    return {
+      token: localStorage.getItem('token') || '',
+      Logo,
+      parsed: null  // initialize parsed as null
     };
+  },
+  created() {
+    if (this.token) {
+      try {
+        const payload = this.token.split('.')[1];
+        const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+        this.parsed = JSON.parse(decoded);
+      } catch (e) {
+        console.error('Failed to parse token:', e);
+        this.parsed = null;
+      }
+    }
   },
   computed: {
     isTokenEmpty() {
       return !this.token;
-    },
+    }
   },
   methods: {
     logout() {
       localStorage.removeItem('token');
-      this.token = ''; // make reactive
+      this.token = '';
+      this.parsed = null;
       this.$router.push('/').then(() => {
-        window.location.reload(); // reload the page if really needed
+        window.location.reload();
       });
     }
   }
 }
 </script>
 
+
 <style scoped>
 .navbar {
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -105,7 +116,7 @@ a.show .profile-icon {
   color: #FF3200;
 }
 
-.active:active{
+.active:active {
   color: #FF3200;
 }
 

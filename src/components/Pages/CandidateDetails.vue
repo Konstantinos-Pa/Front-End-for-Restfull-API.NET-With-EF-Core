@@ -16,6 +16,7 @@
     <div v-if="activeTab === 'details'">
       <!-- VIEW MODE -->
       <div v-if="!isEditing" class="grid">
+        <div class="row"><span>User Name</span><span>{{ candidate.userName }}</span></div>
         <div class="row"><span>First Name</span><span>{{ candidate.firstName }}</span></div>
         <div class="row"><span>Middle Name</span><span>{{ candidate.middleName }}</span></div>
         <div class="row"><span>Last Name</span><span>{{ candidate.lastName }}</span></div>
@@ -23,7 +24,7 @@
         <div class="row"><span>Date of Birth</span><span>{{ candidate.dateOfBirth }}</span></div>
         <div class="row"><span>Email</span><span>{{ candidate.email }}</span></div>
         <div class="row"><span>Native Language</span><span>{{ candidate.nativeLanguage }}</span></div>
-        <div class="row"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
+        <div class="row full-width"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
 
         <div class="actions">
           <button class="btn edit" @click="startEdit">Edit Candidate</button>
@@ -32,6 +33,11 @@
 
       <!-- EDIT MODE -->
       <form v-else class="grid" @submit.prevent="saveChanges">
+        <div class="row">
+          <span>User Name</span>
+          <input v-model="editableCandidate.userName" required />
+        </div>
+
         <div class="row">
           <span>First Name</span>
           <input v-model="editableCandidate.firstName" required maxlength="20" />
@@ -71,16 +77,16 @@
             maxlength="50" required>
         </div>
 
-        <div class="row">
+        <div class="row full-width">
           <span>Phone Number</span>
-          <input type="tel" v-model="editableCandidate.phoneNumber" required />
+          <input type="tel" v-model="editableCandidate.phoneNumber" pattern="[0-9]{10}" required />
         </div>
 
-        <p class="text-danger mb-3 text-start position-relative" v-if="errors">
-        <ul v-for="error in errors">
-          <li>{{ error[0] }}</li>
+        <div class="text-danger mb-3 text-start position-relative full-width" v-if="errors">
+        <ul v-if="errorsF">
+          <li>{{ errors }}</li>
         </ul>
-        </p>
+      </div>
 
         <div class="actions">
           <button type="button" class="btn cancel" @click="cancelEdit">Cancel</button>
@@ -121,6 +127,7 @@ export default {
     return {
       activeTab: "details",
       errors: {},
+      errorsF: false,
       isEditing: false,
       editableCandidate: null,
       certificates: [],
@@ -148,18 +155,15 @@ export default {
     },
     async saveChanges() {
       try {
-        // Ensure Certificates exists as an array
-        if (!this.editableCandidate.Certificates) {
-          this.editableCandidate.Certificates = [];
-        }
         await axiosService.putCandidate(this.editableCandidate.id, this.editableCandidate);
         Object.assign(this.candidate, this.editableCandidate);
         this.isEditing = false;
         this.editableCandidate = null;
       } catch (error) {
-        if (error.response?.data) {
-          error = error.response.data;
-          this.errors = error?.errors;
+        if (error.response.data) {
+          this.errorsF=true;
+          this.errors = error.response?.data;
+          //this.errors = error?.errors;
         }
       }
     },
@@ -379,5 +383,9 @@ h2 {
   .container {
     padding: 24px 18px 30px;
   }
+}
+
+.full-width {
+  grid-column: 1 / -1;
 }
 </style>

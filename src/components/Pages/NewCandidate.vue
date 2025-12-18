@@ -82,11 +82,11 @@
             </div>
 
             <!-- Display Errors -->
-            <p class="text-danger mb-3 text-start" v-if="errors">
+            <div class="text-danger mb-3 text-start" v-if="errors">
             <ul>
               <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
             </ul>
-            </p>
+          </div>
           </div>
 
           <!-- RIGHT SIDE: Address -->

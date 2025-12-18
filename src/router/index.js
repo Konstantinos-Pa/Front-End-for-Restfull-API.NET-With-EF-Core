@@ -26,11 +26,13 @@ const router = createRouter({
       path: '/certificates',
       name: 'certificates',
       component: Certificates,
+    meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
     {
       path: '/profile',
       name: 'ProfileDetails',
       component: ProfileDetailes,
+      meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
     {
       path: '/Login',
@@ -46,13 +48,47 @@ const router = createRouter({
       path: '/candidateList',
       component: CandidateList,
       name: 'CandidateList',
+    meta: { requiresAuth: true, roles: ['Administrator'] }
     },
     {
       path: '/candidatelist/newcandidate',
       component: NewCandidate,
       name: 'NewCandidate',
+    meta: { requiresAuth: true, roles: [ 'Administrator'] }
     },
   ],
 })
+
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta.requiresAuth) {
+    return next(); // no protection needed
+  }
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return next('/Login');
+  }
+
+  try {
+    const payload = token.split('.')[1];
+    const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const parsed = JSON.parse(decoded);
+
+    if (to.meta.roles && !to.meta.roles.includes(parsed.role)) {
+      alert('Access denied: insufficient permissions');
+      return next('/');
+    }
+
+    next(); // authorized
+  } catch (error) {
+    console.error('Invalid token', error);
+    localStorage.removeItem('token');
+    next('/Login');
+  }
+});
+
+
 
 export default router
