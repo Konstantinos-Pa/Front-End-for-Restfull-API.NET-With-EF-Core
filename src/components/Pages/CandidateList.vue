@@ -55,7 +55,7 @@
     <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
       <div class="modal-content">
         <button class="close-btn" @click="closeModal">✕</button>
-        <CandidateDetails :candidate="selectedCandidate" />
+        <CandidateDetails :candidate="selectedCandidate" :address="address"/>
       </div>
     </div>
   </div>
@@ -71,6 +71,16 @@ export default {
   data() {
     return {
       candidatelist: [],
+      address: {
+        city: '',
+        street: '',
+        state: '',
+        postalCode: '',
+        country: '',
+        country: '',
+        landlineNumber: '',
+        candidateId: ''
+      },
       searchTerm: "",
       selectedCandidate: null,
       showModal: false,
@@ -117,14 +127,35 @@ export default {
       });
     },
 
-    openCandidate(candidate) {
+    async openCandidate(candidate) {
       this.selectedCandidate = candidate;
       this.showModal = true;
+      
+        try {
+          const addressRes = await axiosService.getaddressByCandidateId(candidate.id);
+          this.address = addressRes.data;
+          this.addressLoaded=true;
+        }
+        catch (err) {
+          if (this.address.city === '') {
+            this.addreCreate = true;
+          }
+        }
     },
 
     closeModal() {
       this.showModal = false;
       this.selectedCandidate = null;
+      this.address = {
+        city: '',
+        street: '',
+        state: '',
+        postalCode: '',
+        country: '',
+        country: '',
+        landlineNumber: '',
+        candidateId: ''
+      };
     },
   },
 };

@@ -90,5 +90,32 @@ export default {
       throw error;
     }
   },
+  async getaddressByCandidateId(CandidateId) {
+    try {
+      const response = await apiClient.get(`/Address/${CandidateId}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+      throw error;
+    }
+  },
+  async putAddress(AddressId, AddressData) {
+    try {
+      const response = await apiClient.put(`/Address/${AddressId}`, AddressData);
+      return response;
+    } catch (error) {
+      console.error('Error updating candidate:', error);
+      throw error;
+    }
+  },
+  async postAddress( AddressData) {
+    try {
+      const response = await apiClient.post(`/Address`, AddressData);
+      return response;
+    } catch (error) {
+      console.error('Error updating candidate:', error);
+      throw error;
+    }
+  },
 };
 

@@ -24,6 +24,13 @@
         <div class="row"><span>Email</span><span>{{ candidate.email }}</span></div>
         <div class="row"><span>Native Language</span><span>{{ candidate.nativeLanguage }}</span></div>
         <div class="row"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
+        <div class="row"><span>Address</span></div>
+        <div class="row"><span>City</span><span>{{ address.city }}</span></div>
+        <div class="row"><span>Street</span><span>{{ address.street }}</span></div>
+        <div class="row"><span>State</span><span>{{ address.state }}</span></div>
+        <div class="row"><span>Postal Code</span>{{ address.postalCode }}<span></span></div>
+        <div class="row"><span>Country</span><span>{{ address.country }}</span></div>
+        <div class="row"><span>LandlineNumber</span>{{ address.landlineNumber }}<span></span></div>
 
         <div class="actions">
           <button class="btn edit" @click="startEdit">Edit Candidate</button>
@@ -77,11 +84,45 @@
           <input type="tel" v-model="editableCandidate.phoneNumber" pattern="[0-9]{10}" required />
         </div>
 
+        <div class="row">
+          <span><strong>Address</strong></span>
+        </div>
+
+        <div class="row">
+          <span>City</span>
+          <input type="text" v-model="editableaddress.city" required />
+        </div>
+
+        <div class="row">
+          <span>Street</span>
+          <input type="text" v-model="editableaddress.street" required />
+        </div>
+
+        <div class="row">
+          <span>State</span>
+          <input type="text" v-model="editableaddress.state" required />
+        </div>
+
+        <div class="row">
+          <span>Postal Code</span>
+          <input type="text" v-model="editableaddress.postalCode" pattern="[0-9]{5}" required />
+        </div>
+
+        <div class="row">
+          <span>Country</span>
+          <input type="tetx" v-model="editableaddress.country" required />
+        </div>
+
+        <div class="row">
+          <span>Landline Number</span>
+          <input type="number" v-model="editableaddress.landlineNumber" required />
+        </div>
+
         <div class="text-danger mb-3 text-start position-relative full-width" v-if="errors">
-        <ul v-if="errorsF">
-          <li>{{ errors }}</li>
-        </ul>
-      </div>
+          <ul v-if="errorsF">
+            <li>{{ errors }}</li>
+          </ul>
+        </div>
 
         <div class="actions">
           <button type="button" class="btn cancel" @click="cancelEdit">Cancel</button>
@@ -117,6 +158,7 @@ export default {
   name: "CandidateDetails",
   props: {
     candidate: { type: Object, required: true },
+    address: { type: Object, required: true },
   },
   data() {
     return {
@@ -128,13 +170,26 @@ export default {
       certificates: [],
       certificatesLoaded: false,
       certificatesLoading: false,
+      addressLoaded: false,
+      addressLoading: false,
+      addreCreate:false,
+      editableaddress: {
+        city: '',
+        street: '',
+        state: '',
+        postalCode: '',
+        country: '',
+        country: '',
+        landlineNumber: '',
+        candidateId: ''
+      },
     };
   },
   methods: {
-    switchTab(tab) {
+    async switchTab(tab) {
       this.activeTab = tab;
       if (tab === "certificates" && !this.certificatesLoaded) {
-        axiosService.getCertificatesOfCandidate(this.candidate.id).then(res => {
+        await axiosService.getCertificatesOfCandidate(this.candidate.id).then(res => {
           this.certificates = res.data;
           this.certificatesLoaded = true;
         });
@@ -142,6 +197,7 @@ export default {
     },
     startEdit() {
       this.editableCandidate = { ...this.candidate };
+      this.editableaddress = { ...this.address };
       this.isEditing = true;
     },
     cancelEdit() {
@@ -150,15 +206,22 @@ export default {
     },
     async saveChanges() {
       try {
+        this.editableaddress.candidateId=this.candidate.id;
         await axiosService.putCandidate(this.editableCandidate.id, this.editableCandidate);
+        if(this.address.city===''){
+          const res = await axiosService.postAddress(this.editableaddress);
+        }
+        else{
+          const res = await axiosService.putAddress(this.editableaddress.id,this.editableaddress)
+        }
         Object.assign(this.candidate, this.editableCandidate);
+        Object.assign(this.address, this.editableaddress);
         this.isEditing = false;
         this.editableCandidate = null;
       } catch (error) {
         if (error.response.data) {
-          this.errorsF=true;
+          this.errorsF = true;
           this.errors = error.response?.data;
-          //this.errors = error?.errors;
         }
       }
     },

@@ -21,6 +21,7 @@
           <div class="sub-title">Address 1</div>
           <div class="row"><span>Street</span><span>{{ address.street || '-' }}</span></div>
           <div class="row"><span>City</span><span>{{ address.city || '-' }}</span></div>
+          <div class="row"><span>Landline Number</span><span>{{ address.landlineNumber || '-' }}</span></div>
           <div class="row"><span>Postal Code</span><span>{{ address.postalCode || '-' }}</span></div>
           <div class="row"><span>State</span><span>{{ address.state || '-' }}</span></div>
           <div class="row"><span>Country</span><span>{{ address.country || '-' }}</span></div>
@@ -95,6 +96,11 @@
               </div>
 
               <div class="form-group">
+                <label>Landline Number</label>
+                <input v-model="editaddress.landlineNumber" type="number" />
+              </div>
+
+              <div class="form-group">
                 <label>Postal Code</label>
                 <input v-model="editaddress.postalCode" type="text" />
               </div>
@@ -142,39 +148,46 @@ export default {
       editDetails: {},
       errors: {},
       address: {
-        street: '',
         city: '',
-        postalCode: '',
+        street: '',
         state: '',
-        country: ''
+        postalCode: '',
+        country: '',
+        country: '',
+        landlineNumber: '',
+        candidateId: ''
       },
       editaddress: {
-        street: '',
         city: '',
-        postalCode: '',
+        street: '',
         state: '',
-        country: ''
-      }
+        postalCode: '',
+        country: '',
+        country: '',
+        landlineNumber: '',
+        candidateId: ''
+      },
+      addreCreate: false
     };
   },
-  created() {
+  async created() {
     if (!this.token) return;
 
     const payload = this.token.split('.')[1];
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
     this.parsed = JSON.parse(decoded);
 
-    axiosService.getCandidateByUserName(this.parsed.unique_name)
-      .then(r => this.candidateDetails = r.data)
-      .catch(err => {
-        console.log(err);
-        // localStorage.removeItem('token');
-        // this.token = '';
-        // this.parsed = null;
-        // this.$router.push('/').then(() => {
-        //   window.location.reload();
-        // });
-      });
+    try {
+      const candidateRes = await axiosService.getCandidateByUserName(this.parsed.unique_name);
+      this.candidateDetails = candidateRes.data;
+      const addressRes = await axiosService.getaddressByCandidateId(this.candidateDetails.id);
+      this.address = addressRes.data;
+    } catch (error) {
+      if (this.address.city === '') {
+        this.addreCreate = true;
+      }
+      console.log(error);
+    };
   },
   methods: {
     formatDate(date) {
@@ -183,6 +196,8 @@ export default {
     },
     openModal() {
       this.editDetails = { ...this.candidateDetails };
+      this.editaddress = { ...this.address };
+      this.editaddress.candidateId = this.editDetails.id
       this.isModalOpen = true;
     },
     closeModal() {
@@ -196,8 +211,21 @@ export default {
           this.editDetails.id,
           this.editDetails
         );
+        if (this.addreCreate === true) {
+          const res = await axiosService.postAddress(
+            this.editaddress
+          )
+          this.addreCreate = false;
+        }
+        else {
+          const res = await axiosService.putAddress(
+            this.editaddress.id,
+            this.editaddress
+          )
+        }
 
         this.candidateDetails = { ...this.editDetails };
+        this.address = { ...this.editaddress };
         this.closeModal();
 
       } catch (err) {

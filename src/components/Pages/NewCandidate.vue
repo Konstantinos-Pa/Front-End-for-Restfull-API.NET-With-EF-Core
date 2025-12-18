@@ -88,29 +88,6 @@
             </ul>
           </div>
           </div>
-
-          <!-- RIGHT SIDE: Address -->
-          <div class="right">
-            <h3>Address 1</h3>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="Street" v-model="address1.street" />
-            </div>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="City" v-model="address1.city" />
-            </div>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="Postal Code" v-model="address1.postalCode" />
-            </div>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="State" v-model="address1.state" />
-            </div>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="Country" v-model="address1.country" />
-            </div>
-            <div class="mb-3 text-start">
-              <input type="text" class="form-control" placeholder="Landline" v-model="address1.landline" />
-            </div>
-          </div>
         </div>
 
         <!-- Buttons -->
@@ -143,14 +120,6 @@ export default {
         dob: "",
         email: "",
         nativeLanguage: "",
-      },
-      address1: {
-        street: "",
-        city: "",
-        postalCode: "",
-        state: "",
-        country: "Greece",
-        landline: "+30",
       },
       showPassword: false,
       showConfirmPassword: false,
