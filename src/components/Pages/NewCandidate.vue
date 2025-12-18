@@ -1,84 +1,127 @@
 <template>
   <div class="new-candidate">
     <div class="card">
-    <h2><strong> New Candidate </strong></h2>
-    <form @submit.prevent="saveCandidate">
-      <div class="candidate-details">
-        <div class="left">
-          <label>First Name</label>
-          <input v-model="formData.firstName" type="text" />
+      <h2><strong>New Candidate</strong></h2>
+      <form @submit.prevent="saveCandidate">
+        <div class="candidate-details">
+          <!-- LEFT SIDE: User & Personal Info -->
+          <div class="left">
+            <!-- Username -->
+            <div class="mb-3 text-start">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" v-model="formData.username" required />
+            </div>
 
-          <label>Middle Name</label>
-          <input v-model="formData.middleName" type="text" />
+            <!-- Email -->
+            <div class="mb-3 text-start">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" v-model="formData.email" required />
+            </div>
 
-          <label>Last Name</label>
-          <input v-model="formData.lastName" type="text" />
+            <!-- Password -->
+            <div class="mb-3 text-start position-relative">
+              <label for="password" class="form-label">Password</label>
+              <input :type="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                v-model="formData.password" required />
+              <button type="button" class="toggle-password" @click="showPassword = !showPassword">
+                {{ showPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
 
-          <label>Gender</label>
-          <select v-model="formData.gender">
-            <option :value="0">Male</option>
-            <option :value="1">Female</option>
-          </select>
+            <!-- Confirm Password -->
+            <div class="mb-3 text-start position-relative">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <input :type="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirmPassword"
+                v-model="formData.confirmPassword" required />
+              <button type="button" class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
+                {{ showConfirmPassword ? 'Hide' : 'Show' }}
+              </button>
+            </div>
 
-          <label>Date Of Birth</label>
-          <input v-model="formData.dob" type="date" />
+            <!-- First Name -->
+            <div class="mb-3 text-start">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName" v-model="formData.firstName" maxlength="50"
+                required />
+            </div>
 
-          <label>Email</label>
-          <input v-model="formData.email" type="email" />
+            <!-- Middle Name -->
+            <div class="mb-3 text-start">
+              <label for="middleName" class="form-label">Middle Name</label>
+              <input type="text" class="form-control" id="middleName" v-model="formData.middleName" maxlength="50" />
+            </div>
 
-          <label>Native Language</label>
-          <input v-model="formData.nativeLanguage" type="text" />
+            <!-- Last Name -->
+            <div class="mb-3 text-start">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName" v-model="formData.lastName" maxlength="50"
+                required />
+            </div>
 
-          <label>Home Phone</label>
-          <input v-model="formData.homePhone" type="text" />
+            <!-- Gender -->
+            <div class="mb-3 text-start">
+              <label for="gender" class="form-label">Gender</label>
+              <select id="gender" class="form-select" v-model="formData.gender" required>
+                <option value="" disabled>Select Gender</option>
+                <option :value="0">Male</option>
+                <option :value="1">Female</option>
+              </select>
+            </div>
 
-          <label>Mobile Phone</label>
-          <input v-model="formData.mobilePhone" type="text" />
+            <!-- Date of Birth -->
+            <div class="mb-3 text-start">
+              <label for="dob" class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="dob" v-model="formData.dob" required />
+            </div>
+
+            <!-- Native Language -->
+            <div class="mb-3 text-start">
+              <label for="nativeLanguage" class="form-label">Native Language</label>
+              <input type="text" class="form-control" id="nativeLanguage" v-model="formData.nativeLanguage"
+                maxlength="50" required />
+            </div>
+
+            <!-- Display Errors -->
+            <p class="text-danger mb-3 text-start" v-if="errors">
+            <ul>
+              <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+            </ul>
+            </p>
+          </div>
+
+          <!-- RIGHT SIDE: Address -->
+          <div class="right">
+            <h3>Address 1</h3>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="Street" v-model="address1.street" />
+            </div>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="City" v-model="address1.city" />
+            </div>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="Postal Code" v-model="address1.postalCode" />
+            </div>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="State" v-model="address1.state" />
+            </div>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="Country" v-model="address1.country" />
+            </div>
+            <div class="mb-3 text-start">
+              <input type="text" class="form-control" placeholder="Landline" v-model="address1.landline" />
+            </div>
+          </div>
         </div>
 
-        <div class="right">
-          <h3>Address 1</h3>
-          <input
-            v-model="formData.address1.street"
-            placeholder="Street"
-            type="text"
-          />
-          <input
-            v-model="formData.address1.city"
-            placeholder="City"
-            type="text"
-          />
-          <input
-            v-model="formData.address1.postalCode"
-            placeholder="Postal Code"
-            type="text"
-          />
-          <input
-            v-model="formData.address1.state"
-            placeholder="State"
-            type="text"
-          />
-          <input
-            v-model="formData.address1.country"
-            placeholder="Country"
-            type="text"
-          />
-          <input
-            v-model="formData.address1.landline"
-            placeholder="Landline"
-            type="text"
-          />
+        <!-- Buttons -->
+        <div class="buttons">
+          <router-link to="/candidatelist">
+            <button type="button">Cancel</button>
+          </router-link>
+          <button type="submit">Save Changes</button>
         </div>
-      </div>
-
-      <div class="buttons">
-        <router-link to="/candidatelist">
-          <button type="button">Cancel</button>
-        </router-link>
-        <button type="submit">Save Changes</button>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -90,44 +133,58 @@ export default {
   data() {
     return {
       formData: {
+        username: "",
+        password: "",
+        confirmPassword: "",
         firstName: "",
         middleName: "",
         lastName: "",
         gender: 0,
         dob: "",
         email: "",
-        nativeLanguage: "English",
-        homePhone: "",
-        mobilePhone: "",
-        address1: {
-          street: "",
-          city: "",
-          postalCode: "",
-          state: "",
-          country: "Greece",
-          landline: "+30",
-        },
+        nativeLanguage: "",
       },
+      address1: {
+        street: "",
+        city: "",
+        postalCode: "",
+        state: "",
+        country: "Greece",
+        landline: "+30",
+      },
+      showPassword: false,
+      showConfirmPassword: false,
+      errors: null,
     };
   },
   methods: {
-    cancel() {
-      this.$router.push("/");
-    },
     async saveCandidate() {
+      this.errors = null;
+
+      // Basic password match validation
+      if (this.formData.password !== this.formData.confirmPassword) {
+        this.errors = ["Password and Confirm Password do not match."];
+        return;
+      }
+
       try {
-        const result = await axiosService.createCandidate(this.formData);
-        this.$router.push("/candidateList"); // επιστροφή στη λίστα
-      } catch (error) {
-        console.error("Failed to save candidate:", error);
+        await axiosService.Register(this.formData);
+        this.$router.push("/candidateList");
+      }
+      catch (error) {
+        if (error.response?.data) {
+          const errData = error.response.data;
+          this.errors = errData?.error || { general: "Registration failed" };
+        }
       }
     },
   },
 };
 </script>
 
+
 <style scoped>
-  /* ================= GLOBAL FIX ================= */
+/* ================= GLOBAL FIX ================= */
 *,
 *::before,
 *::after {
@@ -285,5 +342,4 @@ button:hover {
     width: 100%;
   }
 }
-
 </style>

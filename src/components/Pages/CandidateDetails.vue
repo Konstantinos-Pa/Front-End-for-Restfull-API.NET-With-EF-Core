@@ -7,7 +7,6 @@
       <button :class="{ active: activeTab === 'details' }" @click="switchTab('details')">
         Candidate Details
       </button>
-
       <button :class="{ active: activeTab === 'certificates' }" @click="switchTab('certificates')">
         Candidate Certificates
       </button>
@@ -17,40 +16,14 @@
     <div v-if="activeTab === 'details'">
       <!-- VIEW MODE -->
       <div v-if="!isEditing" class="grid">
-        <div class="row">
-          <span>First Name</span>
-          <span>{{ candidate.firstName }}</span>
-        </div>
-
-        <div class="row">
-          <span>Middle Name</span>
-          <span>{{ candidate.middleName }}</span>
-        </div>
-
-        <div class="row">
-          <span>Last Name</span>
-          <span>{{ candidate.lastName }}</span>
-        </div>
-
-        <div class="row">
-          <span>Gender</span>
-          <span>{{ candidate.gender ? "Female" :"Male"  }}</span>
-        </div>
-
-        <div class="row">
-          <span>Date of Birth</span>
-          <span>{{ candidate.dateOfBirth }}</span>
-        </div>
-
-        <div class="row">
-          <span>Email</span>
-          <span>{{ candidate.email }}</span>
-        </div>
-
-        <div class="row center-row">
-          <span>Native Language</span>
-          <span>{{ candidate.nativeLanguage }}</span>
-        </div>
+        <div class="row"><span>First Name</span><span>{{ candidate.firstName }}</span></div>
+        <div class="row"><span>Middle Name</span><span>{{ candidate.middleName }}</span></div>
+        <div class="row"><span>Last Name</span><span>{{ candidate.lastName }}</span></div>
+        <div class="row"><span>Gender</span><span>{{ candidate.gender ? "Female" : "Male" }}</span></div>
+        <div class="row"><span>Date of Birth</span><span>{{ candidate.dateOfBirth }}</span></div>
+        <div class="row"><span>Email</span><span>{{ candidate.email }}</span></div>
+        <div class="row"><span>Native Language</span><span>{{ candidate.nativeLanguage }}</span></div>
+        <div class="row"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
 
         <div class="actions">
           <button class="btn edit" @click="startEdit">Edit Candidate</button>
@@ -61,22 +34,22 @@
       <form v-else class="grid" @submit.prevent="saveChanges">
         <div class="row">
           <span>First Name</span>
-          <input v-model="editableCandidate.firstName" required />
+          <input v-model="editableCandidate.firstName" required maxlength="20" />
         </div>
 
         <div class="row">
           <span>Middle Name</span>
-          <input v-model="editableCandidate.middleName" />
+          <input v-model="editableCandidate.middleName" maxlength="20" />
         </div>
 
         <div class="row">
           <span>Last Name</span>
-          <input v-model="editableCandidate.lastName" required />
+          <input v-model="editableCandidate.lastName" required maxlength="20" />
         </div>
 
         <div class="row">
           <span>Gender</span>
-          <select v-model="editableCandidate.gender">
+          <select v-model="editableCandidate.gender" required>
             <option :value="0">Male</option>
             <option :value="1">Female</option>
           </select>
@@ -89,20 +62,18 @@
 
         <div class="row">
           <span>Email</span>
-          <input type="email" v-model="editableCandidate.email" required />
+          <input type="email" v-model="editableCandidate.email" required maxlength="100" />
         </div>
 
-        <div class="row center-row">
+        <div class="row">
           <span>Native Language</span>
-          <select v-model="editableCandidate.nativeLanguage" required>
-            <option value="" disabled>Select language</option>
-            <option>English</option>
-            <option>Greek</option>
-            <option>Spanish</option>
-            <option>French</option>
-            <option>German</option>
-            <option>Italian</option>
-          </select>
+          <input type="text" class="form-control" id="nativeLanguage" v-model="editableCandidate.nativeLanguage"
+            maxlength="50" required>
+        </div>
+
+        <div class="row">
+          <span>Phone Number</span>
+          <input type="tel" v-model="editableCandidate.phoneNumber" required />
         </div>
 
         <p class="text-danger mb-3 text-start position-relative" v-if="errors">
@@ -112,9 +83,7 @@
         </p>
 
         <div class="actions">
-          <button type="button" class="btn cancel" @click="cancelEdit">
-            Cancel
-          </button>
+          <button type="button" class="btn cancel" @click="cancelEdit">Cancel</button>
           <button type="submit" class="btn save">Save Changes</button>
         </div>
       </form>
@@ -122,29 +91,18 @@
 
     <!-- ================= CERTIFICATES TAB ================= -->
     <div v-if="activeTab === 'certificates'">
-      <div v-if="certificatesLoading" class="state">
-        Loading certificates...
-      </div>
-
-      <div v-else-if="certificates.length === 0" class="state">
-        No certificates found.
-      </div>
-
+      <div v-if="certificatesLoading" class="state">Loading certificates...</div>
+      <div v-else-if="certificates.length === 0" class="state">No certificates found.</div>
       <div v-else class="cert-grid">
         <div v-for="cert in certificates" :key="cert.id" class="cert-card">
           <h3>{{ cert.Title }}</h3>
-          <p>
-            <strong>Assessment Test Code:</strong> {{ cert.AssessmentTestCode }}
-          </p>
+          <p><strong>Assessment Test Code:</strong> {{ cert.AssessmentTestCode }}</p>
           <p><strong>Examination Date:</strong> {{ cert.ExaminationDate }}</p>
           <p><strong>Score report date:</strong> {{ cert.ScoreReportDate }}</p>
           <p><strong>Candidate score:</strong> {{ cert.CandidateScore }}</p>
           <p><strong>Maximum score:</strong> {{ cert.MaximumScore }}</p>
           <p><strong>Percentage score:</strong> {{ cert.PercentageScore }}</p>
-          <p>
-            <strong>Assessment result label:</strong>
-            {{ cert.AssessmentResultLabel }}
-          </p>
+          <p><strong>Assessment result label:</strong> {{ cert.AssessmentResultLabel }}</p>
         </div>
       </div>
     </div>
@@ -156,71 +114,51 @@ import axiosService from "../service/axiosService";
 
 export default {
   name: "CandidateDetails",
-
   props: {
-    candidate: {
-      type: Object,
-      required: true,
-    },
+    candidate: { type: Object, required: true },
   },
-
   data() {
     return {
       activeTab: "details",
       errors: {},
-
-      // details
       isEditing: false,
       editableCandidate: null,
-
-      // certificates
       certificates: [],
       certificatesLoaded: false,
       certificatesLoading: false,
     };
   },
-
   methods: {
-    /* ---------- TABS ---------- */
     switchTab(tab) {
       this.activeTab = tab;
-      // Τραβάμε certificates ΜΟΝΟ την πρώτη φορά
       if (tab === "certificates" && !this.certificatesLoaded) {
-        axiosService
-          .getCertificatesOfCandidate(this.candidate.candidateNumber)
-          .then((res) => {
-            this.certificates = res.data;
-            this.certificatesLoaded = true;
-          });
+        axiosService.getCertificatesOfCandidate(this.candidate.id).then(res => {
+          this.certificates = res.data;
+          this.certificatesLoaded = true;
+        });
       }
     },
-
-    /* ---------- DETAILS ---------- */
     startEdit() {
       this.editableCandidate = { ...this.candidate };
       this.isEditing = true;
     },
-
     cancelEdit() {
       this.editableCandidate = null;
       this.isEditing = false;
     },
-
     async saveChanges() {
       try {
-        await axiosService.putCandidate(
-          this.editableCandidate.candidateNumber,
-          this.editableCandidate
-        );
-
+        // Ensure Certificates exists as an array
+        if (!this.editableCandidate.Certificates) {
+          this.editableCandidate.Certificates = [];
+        }
+        await axiosService.putCandidate(this.editableCandidate.id, this.editableCandidate);
         Object.assign(this.candidate, this.editableCandidate);
         this.isEditing = false;
         this.editableCandidate = null;
-      }
-      catch (error) {
+      } catch (error) {
         if (error.response?.data) {
           error = error.response.data;
-          // Field-level errors (if any)
           this.errors = error?.errors;
         }
       }
@@ -229,8 +167,9 @@ export default {
 };
 </script>
 
+
 <style scoped>
-  /* ================= CONTAINER ================= */
+/* ================= CONTAINER ================= */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -441,5 +380,4 @@ h2 {
     padding: 24px 18px 30px;
   }
 }
-
 </style>

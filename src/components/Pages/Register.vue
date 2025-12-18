@@ -22,6 +22,50 @@
                                 <input type="email" class="form-control" id="email" v-model="email" required>
                             </div>
 
+                            <!-- First Name -->
+                            <div class="mb-3 text-start">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" v-model="firstName"
+                                    maxlength="20" required>
+                            </div>
+
+                            <!-- Middle Name -->
+                            <div class="mb-3 text-start">
+                                <label for="middleName" class="form-label">Middle Name</label>
+                                <input type="text" class="form-control" id="middleName" v-model="middleName"
+                                    maxlength="20">
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="mb-3 text-start">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" v-model="lastName" maxlength="20"
+                                    required>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="mb-3 text-start">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select id="gender" class="form-select" v-model="gender" required>
+                                    <option value="" disabled>Select Gender</option>
+                                    <option :value="0">Male</option>
+                                    <option :value="1">Female</option>
+                                </select>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="mb-3 text-start">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" v-model="dateOfBirth" required>
+                            </div>
+
+                            <!-- Native Language -->
+                            <div class="mb-3 text-start">
+                                <label for="nativeLanguage" class="form-label">Native Language</label>
+                                <input type="text" class="form-control" id="nativeLanguage" v-model="nativeLanguage"
+                                    maxlength="50" required>
+                            </div>
+
                             <!-- Password -->
                             <div class="mb-3 text-start position-relative">
                                 <label for="password" class="form-label">Your Password</label>
@@ -42,11 +86,14 @@
                                 </button>
                             </div>
 
+                            <!-- Errors -->
                             <p class="text-danger mb-3 text-start position-relative" v-if="errors">
-                            <ul v-for="error in errors">
+                            <ul v-for="(error, field) in errors" :key="field">
                                 <li>{{ error }}</li>
                             </ul>
                             </p>
+
+                            <!-- Submit -->
                             <button type="submit" class="btn w-100 login-btn" :disabled="!canRegister">Register</button>
                         </form>
 
@@ -66,8 +113,14 @@ export default {
             loading: false,
             showpassword: false,
             showpasswordc: false,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            gender: 0,
+            dateOfBirth: '',
             username: '',
             email: '',
+            nativeLanguage: '',
             password: '',
             confirmPassword: '',
             errors: {}
@@ -75,7 +128,8 @@ export default {
     },
     computed: {
         canRegister() {
-            return this.username && this.email && this.password && this.confirmPassword;
+            return this.firstName && this.lastName && this.gender !== '' && this.dateOfBirth &&
+                this.username && this.email && this.nativeLanguage && this.password && this.confirmPassword;
         },
     },
     methods: {
@@ -89,22 +143,26 @@ export default {
             this.loading = true;
             this.errors = {};
 
-            // Check if passwords match
             if (this.password !== this.confirmPassword) {
                 this.errors.confirmPassword = "Passwords do not match";
                 this.loading = false;
                 return;
             }
 
-
             const payload = {
-                userName: this.username,
+                firstName: this.firstName,
+                middleName: this.middleName,
+                lastName: this.lastName,
+                gender: this.gender,
+                dateOfBirth: this.dateOfBirth,
                 email: this.email,
+                nativeLanguage:this.nativeLanguage,
+                userName: this.username,
                 password: this.password
             };
 
             try {
-                const response = await axiosService.Register(payload); // Implement Register in axiosService
+                const response = await axiosService.Register(payload);
 
                 if (response.status === 200) {
                     this.$router.push('/login');
@@ -112,12 +170,8 @@ export default {
             }
             catch (error) {
                 if (error.response?.data) {
-                    error = error.response.data;
-                    // Field-level errors (if any)
-                    this.errors = error?.error;
-
-                    // Global / model-level errors
-                    this.errors.general = errors[""]?.[0] || '';
+                    const errData = error.response.data;
+                    this.errors = errData?.error || { general: "Registration failed" };
                 }
             }
             finally {
