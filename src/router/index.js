@@ -11,6 +11,10 @@ import CertificateList from '@/components/Pages/CertificateList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    // Scroll to top on every navigation
+    return { top: 0 };
+  },
   routes: [
     {
       path: '/',

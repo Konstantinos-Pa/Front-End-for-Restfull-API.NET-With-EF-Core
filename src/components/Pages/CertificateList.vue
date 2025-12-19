@@ -3,35 +3,39 @@
     <h2 class="page-title">Certificates</h2>
 
     <div class="certificates-grid">
-      <div
-        v-for="cert in certificates"
-        :key="cert.id"
-        class="certificate-card"
-      >
+      <div v-for="cert in certificates" :key="cert.id" class="certificate-card">
         <h3 class="card-title">{{ cert.title }}</h3>
         <p class="card-description">{{ cert.description }}</p>
 
-        <!-- <router-link
-          :to="{ name: 'certificatedetails', params: { id: cert.id } }"
-          class="learn-more-btn"
-        >
-          Learn More >
-        </router-link> -->
+          <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
+
       </div>
     </div>
   </section>
+
+  <!-- Modal -->
+  <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
+    <div class="modal-content">
+      <button class="close-btn" @click="closeModal">✕</button>
+      <CertificateDetails :certificates="selectedCertificate" />
+    </div>
+  </div>
+
 </template>
 
 <script>
-  import axiosService from '../service/axiosService';
+import axiosService from '../service/axiosService';
+import CertificateDetails from './CertificateDetails.vue';
 
 export default {
-  name: 'CertificatesList',
+  components: { CertificateDetails },
 
   data() {
     return {
       certificates: [],
       loading: true,
+      showModal: false,
+    selectedCertificate: null,
     };
   },
   methods: {
@@ -47,12 +51,21 @@ export default {
           this.loading = false;
         });
     },
+    closeModal() {
+      this.showModal = false;
+    },
+    OpenModal(cert){
+  this.selectedCertificate = cert;
+      this.showModal = true;
+    }
   },
   created() {
     this.getAllCertificates();
   },
 };
 </script>
+
+
 
 <style scoped>
 .certificates-list {
@@ -64,8 +77,7 @@ export default {
   margin-bottom: 10px;
   padding-bottom: 10px;
 }
-</style>
-<style scoped>
+
 .certificates-page {
   background-color: #d9d9d9;
   padding: 32px;
@@ -98,7 +110,7 @@ export default {
 
 .certificate-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
@@ -116,6 +128,37 @@ export default {
   max-height: 72px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  z-index: 1000;
+  overflow-y: auto;        /* scroll if content taller than screen */
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  overflow: hidden;       /* remove extra internal padding effect */
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .learn-more-btn {

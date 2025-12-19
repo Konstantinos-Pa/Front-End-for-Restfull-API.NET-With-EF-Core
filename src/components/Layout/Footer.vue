@@ -10,11 +10,9 @@
         <div class="footer-col">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Courses</a></li>
-            <li><a href="#">Certificates</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><RouterLink to="/">Home</RouterLink></li>
+            <li><RouterLink to="/about">About</RouterLink></li>
+            <li><RouterLink to="/certificateslist">Certificates</RouterLink></li>
           </ul>
         </div>
 
