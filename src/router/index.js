@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/components/Pages/Main.vue'
 import About from '@/components/Pages/about.vue'
-import Certificates from '@/components/Pages/certificates.vue'
 import ProfileDetailes from '@/components/Pages/profileDetailes.vue'
 import Login from '@/components/Pages/login.vue'
 import Register from '@/components/Pages/Register.vue'
@@ -22,12 +21,6 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: About,
-    },
-    {
-      path: '/certificates',
-      name: 'certificates',
-      component: Certificates,
-    meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
     {
       path: '/profile',
