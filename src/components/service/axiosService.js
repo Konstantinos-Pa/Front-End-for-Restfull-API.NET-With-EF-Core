@@ -21,7 +21,8 @@ export default {
     try {
       const response = await apiClient.get('/Certificates');
       return response;
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error fetching certificates:', error);
       throw error;
     }

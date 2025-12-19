@@ -3,11 +3,16 @@
     <div class="container">
       <!-- Logo -->
       <RouterLink class="navbar-brand" to="/">
-        <img :src="Logo" alt="PeopleCert Logo" class="logo">
+        <img :src="Logo" alt="PeopleCert Logo" class="logo" />
       </RouterLink>
 
       <!-- Toggle for mobile -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -15,11 +20,41 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav align-items-center">
           <li class="nav-item">
-            <RouterLink v-if="['Administrator'].includes(parsed?.role)" class="nav-link active" to="/candidateList">Candidates List</RouterLink>
+            <RouterLink
+              v-if="['Administrator'].includes(parsed?.role)"
+              class="nav-link active"
+              to="/candidateList"
+              >Candidates List</RouterLink
+            >
           </li>
 
-          <li class="nav-item">
-            <RouterLink v-if="['User', 'Administrator'].includes(parsed?.role)" class="nav-link active" to="/certificates">Certificates</RouterLink>
+          <li class="nav-item dropdown ms-3 add25px" v-if="['User', 'Administrator'].includes(parsed?.role)">
+            <a
+              class="nav-link dropdown-toggle p-0"
+              href="#"
+              id="cert"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              >Certificates</a>
+
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="profileDropdown">
+
+              <li>
+                <RouterLink
+                  class="dropdown-item"
+                  v-if="['User', 'Administrator'].includes(parsed?.role)"
+                  to="/certificateslist"
+                  >Certificates List</RouterLink
+                >
+              </li>
+
+              <li>
+                <button class="dropdown-item" @click="logout">Log Out</button>
+              </li>
+            </ul>
           </li>
 
           <li class="nav-item">
@@ -32,20 +67,33 @@
 
           <!-- Profile Dropdown -->
           <li v-else class="nav-item dropdown ms-3">
-            <a class="nav-link dropdown-toggle p-0" href="#" id="profileDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle p-0"
+              href="#"
+              id="profileDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               <i class="bi bi-person-circle profile-icon"></i>
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="profileDropdown"
+            >
               <li>
-                <RouterLink class="dropdown-item" to="/profile">Profile Details</RouterLink>
+                <RouterLink class="dropdown-item" to="/profile"
+                  >Profile Details</RouterLink
+                >
               </li>
               <li>
-                <hr class="dropdown-divider">
+                <hr class="dropdown-divider" />
               </li>
               <li>
-                <button class="dropdown-item text-danger" @click="logout">Log Out</button>
+                <button class="dropdown-item text-danger" @click="logout">
+                  Log Out
+                </button>
               </li>
             </ul>
           </li>
@@ -55,26 +103,25 @@
   </nav>
 </template>
 
-
 <script>
-import Logo from '../icons/Logo-PC.png'
+import Logo from "../icons/Logo-PC.png";
 
 export default {
   data() {
     return {
-      token: localStorage.getItem('token') || '',
+      token: localStorage.getItem("token") || "",
       Logo,
-      parsed: null  // initialize parsed as null
+      parsed: null, // initialize parsed as null
     };
   },
   created() {
     if (this.token) {
       try {
-        const payload = this.token.split('.')[1];
-        const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+        const payload = this.token.split(".")[1];
+        const decoded = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
         this.parsed = JSON.parse(decoded);
       } catch (e) {
-        console.error('Failed to parse token:', e);
+        console.error("Failed to parse token:", e);
         this.parsed = null;
       }
     }
@@ -82,21 +129,20 @@ export default {
   computed: {
     isTokenEmpty() {
       return !this.token;
-    }
+    },
   },
   methods: {
     logout() {
-      localStorage.removeItem('token');
-      this.token = '';
+      localStorage.removeItem("token");
+      this.token = "";
       this.parsed = null;
-      this.$router.push('/').then(() => {
+      this.$router.push("/").then(() => {
         window.location.reload();
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
-
 
 <style scoped>
 .navbar {
@@ -113,14 +159,18 @@ export default {
 }
 
 a.show .profile-icon {
-  color: #FF3200;
+  color: #ff3200;
 }
 
 .active:active {
-  color: #FF3200;
+  color: #ff3200;
 }
 
 .dropdown-menu {
   min-width: 180px;
+}
+
+.add25px{
+  margin-right: 1vw;
 }
 </style>

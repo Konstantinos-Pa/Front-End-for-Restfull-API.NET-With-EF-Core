@@ -1,0 +1,153 @@
+<template>
+  <section class="certificates-page">
+    <h2 class="page-title">Certificates</h2>
+
+    <div class="certificates-grid">
+      <div
+        v-for="cert in certificates"
+        :key="cert.id"
+        class="certificate-card"
+      >
+        <h3 class="card-title">{{ cert.title }}</h3>
+        <p class="card-description">{{ cert.description }}</p>
+
+        <!-- <router-link
+          :to="{ name: 'certificatedetails', params: { id: cert.id } }"
+          class="learn-more-btn"
+        >
+          Learn More >
+        </router-link> -->
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+  import axiosService from '../service/axiosService';
+
+export default {
+  name: 'CertificatesList',
+
+  data() {
+    return {
+      certificates: [],
+      loading: true,
+    };
+  },
+  methods: {
+    getAllCertificates() {
+      axiosService.getAllCertificates()
+        .then((response) => {
+          this.certificates = response.data;
+        })
+        .catch((error) => {
+          console.error('Failed to fetch certificates:', error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+  },
+  created() {
+    this.getAllCertificates();
+  },
+};
+</script>
+
+<style scoped>
+.certificates-list {
+  padding: 20px;
+}
+
+.certificate-item {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+</style>
+<style scoped>
+.certificates-page {
+  background-color: #d9d9d9;
+  padding: 32px;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #000;
+}
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 24px;
+}
+
+.certificate-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.card-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+  flex-grow: 1;
+  max-height: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.learn-more-btn {
+  align-self: flex-start;
+  margin-top: 20px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: none;
+  background-color: #ff3b00;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.learn-more-btn:hover {
+  background-color: #e63400;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .certificates-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .certificates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

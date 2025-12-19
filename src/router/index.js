@@ -7,6 +7,7 @@ import Login from '@/components/Pages/login.vue'
 import Register from '@/components/Pages/Register.vue'
 import CandidateList from '../components/Pages/CandidateList.vue'
 import NewCandidate from '@/components/Pages/NewCandidate.vue'
+import CertificateList from '@/components/Pages/CertificateList.vue'
 
 
 const router = createRouter({
@@ -55,6 +56,12 @@ const router = createRouter({
       component: NewCandidate,
       name: 'NewCandidate',
     meta: { requiresAuth: true, roles: [ 'Administrator'] }
+    },
+    {
+      path: '/certificateslist',
+      component: CertificateList,
+      name: 'CertificateList',
+    meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
   ],
 })
