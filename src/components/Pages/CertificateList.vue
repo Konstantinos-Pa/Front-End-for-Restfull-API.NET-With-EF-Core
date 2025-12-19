@@ -1,5 +1,21 @@
 <template>
-  <section class="certificates-page">
+  <section v-if="most.length !== 0" class="certificates-page">
+    <h3 v-if="certificates.length === 0 && !loading">No certificates found</h3>
+    <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
+
+    <div class="certificates-grid">
+      <div v-for="cert in certificates.filter(c => most.includes(c.id))" :key="cert.id" class="certificate-card">
+        <div>
+
+          <h3 class="card-title">{{ cert.title }}</h3>
+          <p class="card-description">{{ cert.description }}</p>
+
+          <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section v-else class="certificates-page">
     <h3 v-if="certificates.length === 0 && !loading">No certificates found</h3>
     <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
 
@@ -30,7 +46,9 @@ import CertificateDetails from './CertificateDetails.vue';
 
 export default {
   components: { CertificateDetails },
-
+  props: {
+    most: { type: Array, default: () => [] },
+  },
   data() {
     return {
       certificates: [],
@@ -80,7 +98,7 @@ export default {
 }
 
 .certificates-page {
-  background-color: #d9d9d9;
+  background-color: #CBCBCB;
   padding: 32px;
   min-height: 100vh;
 }
@@ -93,9 +111,10 @@ export default {
 }
 
 .certificates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-wrap: wrap;           /* allow multiple rows */
+  justify-content: space-evenly; /* even spacing horizontally */
+  gap: 24px;                 /* spacing between rows and columns */
 }
 
 .certificate-card {
@@ -107,6 +126,8 @@ export default {
   justify-content: space-between;
   min-height: 200px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex: 1 1 420px;           /* grow:1, shrink:1, base width:420px */
+  max-width: 420px; 
 }
 
 .certificate-card:hover {

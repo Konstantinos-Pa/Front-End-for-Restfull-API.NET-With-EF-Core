@@ -8,9 +8,9 @@
         <div class="info-group">
           <h3 class="section-header"><span class="orange-arrow">►</span>Purpose of the Exam</h3>
           <ul class="exam-list">
-            <li>Assess understanding of PRINCE2 Agile principles and practices.</li>
-            <li>Evaluate ability to integrate agile techniques with structured project management.</li>
-            <li>Ensure readiness to manage adaptive and iterative projects effectively.</li>
+            <li>Assess understanding of key concepts and best practices in the relevant field.</li>
+            <li>Evaluate ability to apply knowledge effectively in practical scenarios.</li>
+            <li>Ensure readiness to perform tasks and make informed decisions within the domain</li>
           </ul>
         </div>
 

@@ -16,11 +16,17 @@
             </div>
         </div>
     </div>
+    <h1>
+        Most Saled
+    </h1>
+    <CertificateList :most="[2,3]"/>
+
   </div>
 </template>
 
 <script setup>
     import Main from "../icons/portrait-successful-business-woman-using-digital-tablet.jpg"
+    import CertificateList from "./CertificateList.vue";
 </script>
 
 <style scoped>
@@ -73,4 +79,23 @@
     #welcome3{
         font-size: 24px;
     }
+    h1 {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 2.5rem;        /* larger and more readable */
+    font-weight: 700;          /* bold */
+    color: #ff3b00;            /* matches your button accent color */
+    text-align: center;        /* center on the page */
+    margin: 40px 0 20px 0;     /* space above and below */
+    position: relative;        /* for decorative line */
+}
+
+h1::after {
+    content: "";
+    display: block;
+    width: 60px;               /* small underline */
+    height: 4px;
+    background-color: #ff3b00; /* matches heading color */
+    margin: 12px auto 0;       /* spacing and center */
+    border-radius: 2px;
+}
 </style>
