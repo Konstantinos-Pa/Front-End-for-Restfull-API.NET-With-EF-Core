@@ -1,18 +1,53 @@
 <template>
   <section class="certificates-page">
-    <h3 v-if="certificates.length === 0 && !loading">You have no certificates yet</h3>
-    <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Your Certificates</h2>
-    
 
-    <div class="certificates-grid">
-      <div v-for="cert in certificates" :key="cert.id" class="certificate-card">
-        <h3 class="card-title">{{ cert.title }}</h3>
-        <p class="card-description">{{ cert.description }}</p>
+    <h3 v-if="!loading && certificates.length === 0 && nextcertificates.length === 0 && !flag" class="empty-message">
+      You have no certificates yet
+    </h3>
 
-        <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
+    <h2 v-if="nextcertificates.length && !loading && !flag" class="page-title">
+      Your Next Exam
+    </h2>
 
+    <div class="certificates-grid" v-if="nextcertificates.length && flag || !flag">
+      <div v-for="cert in nextcertificates" :key="cert.id" class="certificate-card">
+        <div class="card-info">
+          <h3 class="card-title">{{ cert.title }}</h3>
+          <p class="card-meta">Description: {{ cert.description }}</p>
+          <p class="card-meta">Your examination date is: {{ cert.examinationDate }}</p>
+        </div>
+        <div class="card-actions">
+          <button class="btn" v-if="new Date(cert.examinationDate) == new Date()">start</button>
+          <button class="btn" @click="OpenModal(cert)">Lern More</button>
+        </div>
       </div>
     </div>
+
+    <h2 v-if="certificates.length && !loading && !flag" class="page-title " >
+      My Certificates
+    </h2>
+
+    <div class="certificates-grid" v-if="certificates.length && !flag">
+      <div v-for="cert in certificates" :key="cert.id" class="certificate-card">
+        <div class="card-info">
+          <h3 class="card-title">{{ cert.title }}</h3>
+          <p class="card-meta">Description: {{ cert.description }}</p>
+          <p class="card-meta">Your examination date was: {{ cert.examinationDate }}</p>
+          <p class="card-meta">Your score date {{ new Date(cert.scoreReportDate) >= new Date() ? 'will be' : 'was' }} on:
+            {{ cert.scoreReportDate }}</p>
+          <div v-if="new Date(cert.scoreReportDate) < new Date()">
+            <p class="card-meta">You {{ cert.assessmentResultLabel ? 'Passed' : 'Failed' }}</p>
+            <p class="card-meta">You scored: {{ cert.candidateScore }} out of {{ cert.maximumScore }}</p>
+            <p class="card-meta">In summary you scored: {{ cert.percentageScore }}% </p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn" @click="seeCertificates()">See My Certifications</button>
+          <button class="btn" @click="OpenModal(cert)">Lern More</button>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- Modal -->
@@ -22,7 +57,6 @@
       <CertificateDetails :certificates="selectedCertificate" />
     </div>
   </div>
-
 </template>
 
 <script>
@@ -31,10 +65,13 @@ import CertificateDetails from './CertificateDetails.vue';
 
 export default {
   components: { CertificateDetails },
-
+  props: {
+    flag: { type: Boolean, default: false },
+  },
   data() {
     return {
       certificates: [],
+      nextcertificates: [],
       loading: true,
       showModal: false,
       selectedCertificate: null,
@@ -43,6 +80,7 @@ export default {
       candidateDetails: null
     };
   },
+
   async created() {
     if (this.token) {
       try {
@@ -50,63 +88,57 @@ export default {
         const decoded = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
         this.parsed = JSON.parse(decoded);
 
-        try {
-          const candidateRes = await axiosService.getCandidateByUserName(this.parsed.unique_name);
-          this.candidateDetails = candidateRes.data;
-          if (this.candidateDetails && this.candidateDetails.id) {
-            await this.getCandidateCertificates();
-          }
-        }
-        catch (error) {
-          console.log(error)
+        const candidateRes = await axiosService.getCandidateByUserName(this.parsed.unique_name);
+        this.candidateDetails = candidateRes.data;
+
+        if (this.candidateDetails && this.candidateDetails.id) {
+          await this.getCandidateCertificates();
         }
       } catch (e) {
-        console.error("Failed to parse token:", e);
+        console.error("Failed to parse token or fetch data:", e);
         this.parsed = null;
       }
     }
   },
+
   methods: {
-    getCandidateCertificates() {
-      axiosService.getCandidateCertificates(this.candidateDetails.id)
-        .then((response) => {
-          this.certificates = response.data;
-        })
-        .catch((error) => {
-          console.error('Failed to fetch certificates:', error);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+    async getCandidateCertificates() {
+      try {
+        const response = await axiosService.getCandidateCertificates(this.candidateDetails.id);
+        const allCertificates = response.data;
+
+        const nowTime = new Date();
+
+        this.nextcertificates = allCertificates.filter(cert => new Date(cert.examinationDate) >= nowTime);
+        this.certificates = allCertificates.filter(cert => new Date(cert.examinationDate) < nowTime);
+      } catch (error) {
+        console.error('Failed to fetch certificates:', error);
+      } finally {
+        this.loading = false;
+      }
     },
+
     closeModal() {
       this.showModal = false;
     },
+
     OpenModal(cert) {
       this.selectedCertificate = cert;
       this.showModal = true;
+    },
+
+    seeCertificates() {
+      // Redirect or handle see certifications action
+      console.log("Redirect to certifications page");
     }
-  },
+  }
 };
 </script>
 
-
-
 <style scoped>
-.certificates-list {
-  padding: 20px;
-}
-
-.certificate-item {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-
 .certificates-page {
-  background-color: #d9d9d9;
+  background-color: #CBCBCB;
   padding: 32px;
-  min-height: 100vh;
 }
 
 .page-title {
@@ -118,41 +150,66 @@ export default {
 
 .certificates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 .certificate-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 24px 28px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  min-height: 200px;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .certificate-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .card-title {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: #000;
 }
 
-.card-description {
+.card-meta {
   font-size: 14px;
-  line-height: 1.5;
-  color: #444;
-  flex-grow: 1;
-  max-height: 72px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #555;
+  margin: 2px 0;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.btn {
+  background-color: #ff3b00;
+}
+
+.btn:hover {
+  background-color: #e63400;
 }
 
 .modal-backdrop {
@@ -161,12 +218,9 @@ export default {
   background: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
-  /* horizontal center */
   align-items: center;
-  /* vertical center */
   z-index: 1000;
   overflow-y: auto;
-  /* scroll if content taller than screen */
 }
 
 .modal-content {
@@ -176,8 +230,6 @@ export default {
   width: 100%;
   max-width: 800px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  /* remove extra internal padding effect */
 }
 
 .close-btn {
@@ -190,36 +242,23 @@ export default {
   cursor: pointer;
 }
 
-.learn-more-btn {
-  align-self: flex-start;
-  margin-top: 20px;
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: none;
-  background-color: #ff3b00;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.learn-more-btn:hover {
-  background-color: #e63400;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 1024px) {
-  .certificates-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-}
-
 @media (max-width: 768px) {
-  .certificates-grid {
-    grid-template-columns: 1fr;
+  .certificate-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
+
+  .card-actions {
+    flex-direction: row;
+  }
+}
+
+.empty-message {
+  margin: 0 auto;
+  padding: 20px 0; /* just some spacing */
+  text-align: center;
+  font-size: 18px;
+  color: #555;
 }
 </style>

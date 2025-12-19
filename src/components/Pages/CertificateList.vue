@@ -10,7 +10,9 @@
           <h3 class="card-title">{{ cert.title }}</h3>
           <p class="card-description">{{ cert.description }}</p>
 
-          <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
+          <div class="card-actions">
+            <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
+          </div>
         </div>
       </div>
     </div>
@@ -112,9 +114,12 @@ export default {
 
 .certificates-grid {
   display: flex;
-  flex-wrap: wrap;           /* allow multiple rows */
-  justify-content: space-evenly; /* even spacing horizontally */
-  gap: 24px;                 /* spacing between rows and columns */
+  flex-wrap: wrap;
+  /* allow multiple rows */
+  justify-content: space-evenly;
+  /* even spacing horizontally */
+  gap: 24px;
+  /* spacing between rows and columns */
 }
 
 .certificate-card {
@@ -126,8 +131,9 @@ export default {
   justify-content: space-between;
   min-height: 200px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  flex: 1 1 420px;           /* grow:1, shrink:1, base width:420px */
-  max-width: 420px; 
+  flex: 1 1 420px;
+  /* grow:1, shrink:1, base width:420px */
+  max-width: 420px;
 }
 
 .certificate-card:hover {
@@ -187,10 +193,16 @@ export default {
   cursor: pointer;
 }
 
-.learn-more-btn {
-  align-self: flex-start;
+.card-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
   margin-top: 20px;
-  padding: 8px 18px;
+}
+
+.learn-more-btn,
+.buy-btn {
+  padding: 8px 20px;
   border-radius: 20px;
   border: none;
   background-color: #ff3b00;
@@ -198,9 +210,13 @@ export default {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
   transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.learn-more-btn:hover,
+.buy-btn:hover {
+  background-color: #e63400;
+  transform: translateY(-2px);
 }
 
 .learn-more-btn:hover {

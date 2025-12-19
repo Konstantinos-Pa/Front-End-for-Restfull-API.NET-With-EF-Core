@@ -24,11 +24,12 @@
         <div class="row"><span>Email</span><span>{{ candidate.email }}</span></div>
         <div class="row"><span>Native Language</span><span>{{ candidate.nativeLanguage }}</span></div>
         <div class="row"><span>Phone Number</span><span>{{ candidate.phoneNumber }}</span></div>
-        <div class="row"><span>Address</span></div>
+        <div class="row section-title"><span>Address</span></div>
         <div class="row"><span>City</span><span>{{ address.city }}</span></div>
         <div class="row"><span>Street</span><span>{{ address.street }}</span></div>
         <div class="row"><span>State</span><span>{{ address.state }}</span></div>
-        <div class="row"><span>Postal Code</span>{{ address.postalCode }}<span></span></div>
+        <div class="row"><span>Postal Code</span><span>{{ address.postalCode }}</span></div>
+
         <div class="row"><span>Country</span><span>{{ address.country }}</span></div>
         <div class="row"><span>LandlineNumber</span>{{ address.landlineNumber }}<span></span></div>
 
@@ -84,7 +85,7 @@
           <input type="tel" v-model="editableCandidate.phoneNumber" pattern="[0-9]{10}" required />
         </div>
 
-        <div class="row">
+        <div class="row section-title">
           <span><strong>Address</strong></span>
         </div>
 
@@ -137,14 +138,16 @@
       <div v-else-if="certificates.length === 0" class="state">No certificates found.</div>
       <div v-else class="cert-grid">
         <div v-for="cert in certificates" :key="cert.id" class="cert-card">
-          <h3>{{ cert.Title }}</h3>
-          <p><strong>Assessment Test Code:</strong> {{ cert.AssessmentTestCode }}</p>
-          <p><strong>Examination Date:</strong> {{ cert.ExaminationDate }}</p>
-          <p><strong>Score report date:</strong> {{ cert.ScoreReportDate }}</p>
-          <p><strong>Candidate score:</strong> {{ cert.CandidateScore }}</p>
-          <p><strong>Maximum score:</strong> {{ cert.MaximumScore }}</p>
-          <p><strong>Percentage score:</strong> {{ cert.PercentageScore }}</p>
-          <p><strong>Assessment result label:</strong> {{ cert.AssessmentResultLabel }}</p>
+          <h3>{{ cert.title }}</h3>
+          <p><strong>Description:</strong> {{ cert.description }}</p>
+          <p><strong>Assessment Test Code:</strong> {{ cert.assessmentTestCode }}</p>
+          <p><strong>Examination Date:</strong> {{ cert.examinationDate }}</p>
+          <p><strong>Score report date:</strong> {{ cert.scoreReportDate }}</p>
+          <p><strong>Candidate score:</strong> {{ cert.candidateScore }}</p>
+          <p><strong>Maximum score:</strong> {{ cert.maximumScore }}</p>
+          <p><strong>Percentage score:</strong> {{ cert.percentageScore }}</p>
+          <p><strong>Assessment result label:</strong> {{ cert.assessmentResultLabel }}</p>
+          <p><strong>Price:</strong> {{ cert.price }}</p>
         </div>
       </div>
     </div>
@@ -233,14 +236,10 @@ export default {
 <style scoped>
 /* ================= CONTAINER ================= */
 .container {
-  max-width: 900px;
-  margin: 0 auto;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 32px 36px 40px;
-  max-height: 90vh;
-  overflow-y: auto;
+  padding-right: 48px;
+  scrollbar-gutter: stable;
 }
+
 
 /* ================= HEADINGS ================= */
 h2 {
@@ -299,15 +298,17 @@ h2 {
 
 /* ================= ROW ================= */
 .row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: 10px;
   padding: 16px 18px;
   border-radius: 14px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
 }
 
+/* label */
 .row span:first-child {
   font-size: 13px;
   font-weight: 600;
@@ -316,21 +317,39 @@ h2 {
   letter-spacing: 0.04em;
 }
 
+/* value */
 .row span:last-child {
   font-size: 15px;
   font-weight: 500;
   color: #111827;
+  word-break: break-word;
 }
+
+.section-title {
+  grid-column: 1 / -1;
+  background: transparent;
+  border: none;
+  padding: 8px 4px;
+}
+
+.section-title span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
 
 /* ================= INPUTS ================= */
 .row input,
 .row select {
+  grid-column: 2 / -1;
   padding: 11px 12px;
   border-radius: 10px;
   border: 1px solid #d1d5db;
   font-size: 14px;
   background: #ffffff;
 }
+
 
 .row input:focus,
 .row select:focus {
@@ -434,16 +453,14 @@ h2 {
 
 /* ================= MOBILE ================= */
 @media (max-width: 640px) {
-  .grid {
+  .row {
     grid-template-columns: 1fr;
   }
 
-  .container {
-    padding: 24px 18px 30px;
+  .row input,
+  .row select {
+    grid-column: 1 / -1;
   }
 }
 
-.full-width {
-  grid-column: 1 / -1;
-}
 </style>

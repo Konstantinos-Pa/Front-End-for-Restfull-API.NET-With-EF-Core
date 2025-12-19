@@ -22,9 +22,6 @@
             <li>The exam authority reserves the right to cancel results if rules are violated.</li>
           </ul>
         </div>
-      </div>
-
-      <div class="column">
         <div class="info-group">
           <h3 class="section-header"><span class="orange-arrow">►</span>Result & Certification</h3>
           <ul class="exam-list">
@@ -63,108 +60,130 @@ export default {
 </script>
 
 <style scoped>
-/* FULL MODAL SYSTEM */
+/* MODAL OVERLAY */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  backdrop-filter: blur(3px);
 }
 
-/* WHITE MODAL BOX */
+/* CARD CONTAINER */
 .exam-card {
   background: #ffffff;
-  width: 90%;
-  max-width: 900px;
-  padding: 50px;
-  border-radius: 14px;
+  width: 92%;
+  max-width: 920px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 40px 44px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   animation: modalIn 0.25s ease-out;
 }
 
-/* TITLES */
+/* TITLE */
 .certificate-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  margin-bottom: 8px;
+  color: #111;
+  margin-bottom: 6px;
 }
 
 .certificate-short-description {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
-  margin-bottom: 24px;
-  color: #333;
+  color: #555;
+  margin-bottom: 32px;
 }
 
-
-/* MODAL ANIMATION */
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
+/* CONTENT GRID */
 .exam-content-grid {
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
 }
 
-.column {
-  flex: 1;
-  min-width: 300px;
+/* GROUP BOX */
+.info-group,
+.support-box {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid #eee;
 }
 
-.info-group {
-  margin-bottom: 24px;
-}
-
+/* SECTION HEADER */
 .section-header {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
+  color: #222;
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
+/* ORANGE INDICATOR */
 .orange-arrow {
-  color: orange;
-  margin-right: 8px;
-  font-weight: bold;
+  width: 8px;
+  height: 8px;
+  background: #ff6a00;
+  border-radius: 50%;
+  display: inline-block;
 }
 
+/* LIST STYLING */
 .exam-list {
-  padding-left: 20px;
-  list-style-type: disc;
+  padding-left: 18px;
+  margin: 0;
 }
 
 .exam-list li {
-  margin-bottom: 8px;
   font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 10px;
 }
 
-.support-box {
-  margin-top: 16px;
-}
-
+/* SUPPORT SECTION */
 .support-text {
   font-size: 14px;
-  margin-bottom: 8px;
+  color: #555;
+  margin-bottom: 10px;
 }
 
 .contact-info p {
   font-size: 14px;
-  margin: 2px 0;
+  margin: 4px 0;
+  color: #333;
 }
+
+/* ANIMATION */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* SCROLLBAR (OPTIONAL NICE TOUCH) */
+.exam-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.exam-card::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+
 </style>
