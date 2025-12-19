@@ -1,6 +1,6 @@
 <template>
   <section v-if="most.length !== 0" class="certificates-page">
-    <h3 v-if="certificates.length === 0 && !loading">No certificates found</h3>
+    <h3 class="empty-message" v-if="certificates.length === 0 && !loading">No certificates found</h3>
     <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
 
     <div class="certificates-grid">
@@ -102,7 +102,6 @@ export default {
 .certificates-page {
   background-color: #CBCBCB;
   padding: 32px;
-  min-height: 100vh;
 }
 
 .page-title {
@@ -234,5 +233,13 @@ export default {
   .certificates-grid {
     grid-template-columns: 1fr;
   }
+}
+.empty-message {
+  margin: 0 auto;
+  padding: 20px 0;
+  /* just some spacing */
+  text-align: center;
+  font-size: 18px;
+  color: #555;
 }
 </style>

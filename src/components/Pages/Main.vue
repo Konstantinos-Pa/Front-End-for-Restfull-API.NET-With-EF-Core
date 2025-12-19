@@ -21,12 +21,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="token">
-            <h1>
-                Your Next Exam
-            </h1>
-            <MyCertificateList :flag="true"/>
-        </div>
+        <MyCertificateList :flag="true" />
         <h1>
             Favorite Certification worldwide
         </h1>

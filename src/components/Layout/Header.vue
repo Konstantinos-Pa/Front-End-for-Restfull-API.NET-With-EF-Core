@@ -7,12 +7,7 @@
       </RouterLink>
 
       <!-- Toggle for mobile -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -20,46 +15,31 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav align-items-center">
           <li class="nav-item">
-            <RouterLink
-              v-if="['Administrator'].includes(parsed?.role)"
-              class="nav-link active"
-              to="/candidateList"
-              >Candidates List</RouterLink
-            >
+            <RouterLink v-if="['Administrator'].includes(parsed?.role)" class="nav-link active" to="/candidateList">
+              Candidates List</RouterLink>
           </li>
 
           <li class="nav-item dropdown ms-3 add25px" v-if="['User', 'Administrator'].includes(parsed?.role)">
-            <a
-              class="nav-link dropdown-toggle p-0"
-              href="#"
-              id="cert"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              >Certificates</a>
+            <a class="nav-link dropdown-toggle p-0" href="#" id="cert" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Certificates</a>
 
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="profileDropdown">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
 
               <li>
-                <RouterLink
-                  class="dropdown-item"
-                  v-if="['User', 'Administrator'].includes(parsed?.role)"
-                  to="/certificateslist"
-                  >All Certificates</RouterLink
-                >
+                <RouterLink class="dropdown-item" v-if="['User', 'Administrator'].includes(parsed?.role)"
+                  to="/certificateslist">All Certificates</RouterLink>
               </li>
 
               <li>
-                <RouterLink
-                  class="dropdown-item"
-                  v-if="['User', 'Administrator'].includes(parsed?.role)"
-                  to="/myCertificates"
-                  >My Certificates</RouterLink
-                >
+                <RouterLink class="dropdown-item" v-if="['User', 'Administrator'].includes(parsed?.role)"
+                  to="/myCertificates">My Certificates</RouterLink>
               </li>
             </ul>
+          </li>
+
+          <li  v-if="isTokenEmpty" class="nav-item">
+            <RouterLink class="dropdown-item" 
+              to="/certificateslist">All Certificates</RouterLink>
           </li>
 
           <li class="nav-item">
@@ -72,25 +52,14 @@
 
           <!-- Profile Dropdown -->
           <li v-else class="nav-item dropdown ms-3">
-            <a
-              class="nav-link dropdown-toggle p-0"
-              href="#"
-              id="profileDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle p-0" href="#" id="profileDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle profile-icon"></i>
             </a>
 
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="profileDropdown"
-            >
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
               <li>
-                <RouterLink class="dropdown-item" to="/profile"
-                  >Profile Details</RouterLink
-                >
+                <RouterLink class="dropdown-item" to="/profile">Profile Details</RouterLink>
               </li>
               <li>
                 <hr class="dropdown-divider" />
@@ -175,7 +144,7 @@ a.show .profile-icon {
   min-width: 180px;
 }
 
-.add25px{
+.add25px {
   margin-right: 1vw;
 }
 </style>

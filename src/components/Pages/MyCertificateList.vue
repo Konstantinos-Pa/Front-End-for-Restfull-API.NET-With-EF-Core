@@ -5,7 +5,7 @@
       You have no certificates yet
     </h3>
 
-    <h2 v-if="nextcertificates.length && !loading && !flag" class="page-title">
+    <h2 v-if="(nextcertificates.length && !loading && flag || !flag) && certificates.length!==0" class="page-title">
       Your Next Exam
     </h2>
 
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <h2 v-if="certificates.length && !loading && !flag" class="page-title " >
+    <h2 v-if="certificates.length && !loading && !flag" class="page-title ">
       My Certificates
     </h2>
 
@@ -33,7 +33,8 @@
           <h3 class="card-title">{{ cert.title }}</h3>
           <p class="card-meta">Description: {{ cert.description }}</p>
           <p class="card-meta">Your examination date was: {{ cert.examinationDate }}</p>
-          <p class="card-meta">Your score date {{ new Date(cert.scoreReportDate) >= new Date() ? 'will be' : 'was' }} on:
+          <p class="card-meta">Your score date {{ new Date(cert.scoreReportDate) >= new Date() ? 'will be' : 'was' }}
+            on:
             {{ cert.scoreReportDate }}</p>
           <div v-if="new Date(cert.scoreReportDate) < new Date()">
             <p class="card-meta">You {{ cert.assessmentResultLabel ? 'Passed' : 'Failed' }}</p>
@@ -138,12 +139,12 @@ export default {
 <style scoped>
 .certificates-page {
   background-color: #CBCBCB;
-  padding: 32px;
 }
 
 .page-title {
-  font-size: 20px;
-  font-weight: 600;
+  padding: 32px;
+  font-size: 32px;
+  font-weight: bold;
   margin-bottom: 24px;
   color: #000;
 }
@@ -256,7 +257,8 @@ export default {
 
 .empty-message {
   margin: 0 auto;
-  padding: 20px 0; /* just some spacing */
+  padding: 20px 0;
+  /* just some spacing */
   text-align: center;
   font-size: 18px;
   color: #555;

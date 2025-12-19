@@ -1,7 +1,7 @@
 <template>
   <div class="exam-card">
-    <h2 class="certificate-title">{{ certificates.title }}</h2>
-    <p class="certificate-short-description">{{ certificates.description }}</p>
+    <h2 class="certificate-title">{{ certificate.title }}</h2>
+    <p class="certificate-short-description">{{ certificate.description }}</p>
 
     <div class="exam-content-grid">
       <div class="column">
@@ -40,15 +40,19 @@
         </div>
       </div>
     </div>
-
+    <router-link class="action-btn" :to="{ name: 'PurchaseCertificate', params: { certificate } }" >
+          Purchase 
+        </router-link>
   </div>
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
   name: 'CertificateDetails',
   props: {
-    certificates: { type: Object, required: true }
+    certificate: { type: Object, required: true }
   },
   data() {
     return {
@@ -186,4 +190,21 @@ export default {
   border-radius: 4px;
 }
 
+.action-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff3b00;
+  color: #fff;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  margin-top: 12px;
+}
+.action-btn:hover {
+  background-color: #e63400;
+  transform: translateY(-2px);
+}
 </style>
