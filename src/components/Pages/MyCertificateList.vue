@@ -1,7 +1,8 @@
 <template>
   <section class="certificates-page">
-    <h3 v-if="certificates.length === 0 && !loading">No certificates found</h3>
-    <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
+    <h3 v-if="certificates.length === 0 && !loading">You have no certificates yet</h3>
+    <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Your Certificates</h2>
+    
 
     <div class="certificates-grid">
       <div v-for="cert in certificates" :key="cert.id" class="certificate-card">
@@ -37,11 +38,37 @@ export default {
       loading: true,
       showModal: false,
       selectedCertificate: null,
+      token: localStorage.getItem("token") || "",
+      parsed: null,
+      candidateDetails: null
     };
   },
+  async created() {
+    if (this.token) {
+      try {
+        const payload = this.token.split(".")[1];
+        const decoded = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
+        this.parsed = JSON.parse(decoded);
+
+        try {
+          const candidateRes = await axiosService.getCandidateByUserName(this.parsed.unique_name);
+          this.candidateDetails = candidateRes.data;
+          if (this.candidateDetails && this.candidateDetails.id) {
+            await this.getCandidateCertificates();
+          }
+        }
+        catch (error) {
+          console.log(error)
+        }
+      } catch (e) {
+        console.error("Failed to parse token:", e);
+        this.parsed = null;
+      }
+    }
+  },
   methods: {
-    async getAllCertificates() {
-      await axiosService.getAllCertificates()
+    getCandidateCertificates() {
+      axiosService.getCandidateCertificates(this.candidateDetails.id)
         .then((response) => {
           this.certificates = response.data;
         })
@@ -59,9 +86,6 @@ export default {
       this.selectedCertificate = cert;
       this.showModal = true;
     }
-  },
-  created() {
-    this.getAllCertificates();
   },
 };
 </script>

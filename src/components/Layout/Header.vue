@@ -47,12 +47,17 @@
                   class="dropdown-item"
                   v-if="['User', 'Administrator'].includes(parsed?.role)"
                   to="/certificateslist"
-                  >Certificates List</RouterLink
+                  >All Certificates</RouterLink
                 >
               </li>
 
               <li>
-                <button class="dropdown-item" @click="logout">Log Out</button>
+                <RouterLink
+                  class="dropdown-item"
+                  v-if="['User', 'Administrator'].includes(parsed?.role)"
+                  to="/myCertificates"
+                  >My Certificates</RouterLink
+                >
               </li>
             </ul>
           </li>

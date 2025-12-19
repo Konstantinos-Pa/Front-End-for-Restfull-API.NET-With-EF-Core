@@ -118,5 +118,15 @@ export default {
       throw error;
     }
   },
+  async getCandidateCertificates(CandidateId) {
+    try {
+      const response = await apiClient.get(`/Candidates/CertificatesOfCandidate/${CandidateId}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching certificates:', error);
+      throw error;
+    }
+  },
 };
 
