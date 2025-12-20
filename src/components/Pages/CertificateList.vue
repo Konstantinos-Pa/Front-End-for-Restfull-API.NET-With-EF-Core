@@ -66,8 +66,8 @@ export default {
   }
   },
   methods: {
-    async getAllCertificates() {
-      await axiosService.getAllCertificates()
+    async getAllSaleCertificates() {
+      await axiosService.getAllSaleCertificates()
         .then((response) => {
           this.certificates = response.data;
         })
@@ -87,7 +87,7 @@ export default {
     }
   },
   created() {
-    this.getAllCertificates();
+    this.getAllSaleCertificates();
   },
 };
 </script>

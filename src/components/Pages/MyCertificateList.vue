@@ -18,14 +18,12 @@
           <p class="card-meta">Your examination date is: {{ cert.examinationDate }}</p>
         </div>
         <div class="card-actions">
-
-          <router-link class="btn" to="/" :class="{ disabled: !isExamAvailable(cert.examinationDate) }"
+          <router-link class="btn" :class="{ disabled: !isExamAvailable(cert.examinationDate) }" :to="{ name: 'ExamQuestions', params: { id: cert.id } }"
             @click.native.prevent="!isExamAvailable(cert.examinationDate)">
             <span>Take exam</span>
           </router-link>
           <button class="btn" @click="OpenModal(cert)">Lern More</button>
         </div>
-
       </div>
     </div>
 
@@ -49,7 +47,6 @@
           </div>
         </div>
         <div class="card-actions">
-          <button class="btn" @click="seeCertificates()">See My Certifications</button>
           <button class="btn" @click="OpenModal(cert)">Lern More</button>
         </div>
       </div>
@@ -69,6 +66,7 @@
 <script>
 import axiosService from '../service/axiosService';
 import CertificateDetails from './CertificateDetails.vue';
+import Exam from './Exam.vue';
 
 export default {
   components: { CertificateDetails },
@@ -160,11 +158,6 @@ export default {
       this.selectedCertificate = cert;
       this.showModal = true;
     },
-
-    seeCertificates() {
-      // Redirect or handle see certifications action
-      console.log("Redirect to certifications page");
-    }
   }
 };
 </script>

@@ -148,5 +148,37 @@ export default {
       throw error;
     }
   },
+  async getCandidateAnalyticsByCertificateId(id) {
+    try {
+      const response = await apiClient.get(`/CandidatesAnalytics/Certificate/${id}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching candidates analytics:', error);
+      throw error;
+    }
+  },
+  async getAllSaleCertificates(){
+
+    try {
+      const response = await apiClient.get(`/SaleCertificates`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching candidates analytics:', error);
+      throw error;
+    }
+  },
+  async getSaleCertificatesById(id){
+
+    try {
+      const response = await apiClient.get(`/SaleCertificates/${id}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching candidates analytics:', error);
+      throw error;
+    }
+  }
 };
 

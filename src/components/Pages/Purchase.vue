@@ -93,7 +93,7 @@ export default {
   async created() {
     try {
       const id = this.$route.params.id;
-      const response = await axiosService.getCertificatesById(id)
+      const response = await axiosService.getSaleCertificatesById(id)
       this.certificate = response.data;
     } catch (error) {
 
