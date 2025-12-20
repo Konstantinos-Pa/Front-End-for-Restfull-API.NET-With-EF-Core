@@ -55,7 +55,7 @@
     <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
       <div class="modal-content">
         <button class="close-btn" @click="closeModal">✕</button>
-        <CandidateDetails :candidate="selectedCandidate" :address="address"/>
+        <CandidateDetails v-if="selectedCandidate && address" :candidate="selectedCandidate" :address="address"/>
       </div>
     </div>
   </div>

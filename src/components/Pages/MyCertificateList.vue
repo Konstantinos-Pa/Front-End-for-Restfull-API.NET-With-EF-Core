@@ -5,7 +5,8 @@
       You have no certificates yet
     </h3>
 
-    <h2 v-if="(nextcertificates.length && !loading && flag || !flag) && certificates.length!==0" class="page-title">
+    <h2 v-if="(nextcertificates.length && !loading && flag || !flag) && nextcertificates.length !== 0"
+      class="page-title">
       Your Next Exam
     </h2>
 
@@ -17,9 +18,14 @@
           <p class="card-meta">Your examination date is: {{ cert.examinationDate }}</p>
         </div>
         <div class="card-actions">
-          <button class="btn" v-if="new Date(cert.examinationDate) == new Date()">start</button>
+
+          <router-link class="btn" to="/" :class="{ disabled: !isExamAvailable(cert.examinationDate) }"
+            @click.native.prevent="!isExamAvailable(cert.examinationDate)">
+            <span>Take exam</span>
+          </router-link>
           <button class="btn" @click="OpenModal(cert)">Lern More</button>
         </div>
+
       </div>
     </div>
 
@@ -55,7 +61,7 @@
   <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
       <button class="close-btn" @click="closeModal">✕</button>
-      <CertificateDetails :certificates="selectedCertificate" />
+      <CertificateDetails :certificate="selectedCertificate" :my="true" />
     </div>
   </div>
 </template>
@@ -103,15 +109,42 @@ export default {
   },
 
   methods: {
+    isExamAvailable(examDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const examDay = new Date(examDate);
+      examDay.setHours(0, 0, 0, 0);
+
+      return today.getTime() === examDay.getTime();
+    },
+    isToday(dateString) {
+      const today = new Date();
+      const date = new Date(dateString);
+
+      return date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate();
+    },
     async getCandidateCertificates() {
       try {
         const response = await axiosService.getCandidateCertificates(this.candidateDetails.id);
         const allCertificates = response.data;
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); // reset time to 00:00:00
 
-        const nowTime = new Date();
+        this.nextcertificates = allCertificates.filter(cert => {
+          const examDate = new Date(cert.examinationDate);
+          examDate.setHours(0, 0, 0, 0); // reset time to 00:00:00
+          return examDate >= now;
+        });
 
-        this.nextcertificates = allCertificates.filter(cert => new Date(cert.examinationDate) >= nowTime);
-        this.certificates = allCertificates.filter(cert => new Date(cert.examinationDate) < nowTime);
+        this.certificates = allCertificates.filter(cert => {
+          const examDate = new Date(cert.examinationDate);
+          examDate.setHours(0, 0, 0, 0); // reset time to 00:00:00
+          return examDate < now;
+        });
+
       } catch (error) {
         console.error('Failed to fetch certificates:', error);
       } finally {
@@ -164,6 +197,7 @@ export default {
   padding: 20px 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 1vw;
 }
 
 .certificate-card:hover {

@@ -19,24 +19,23 @@
   </section>
   <section v-else class="certificates-page">
     <h3 v-if="certificates.length === 0 && !loading">No certificates found</h3>
-    <h2 v-else-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
+    <h2 v-if="certificates.length !== 0 && loading" class="page-title">Certificates</h2>
 
     <div class="certificates-grid">
-      <div v-for="cert in certificates" :key="cert.id" class="certificate-card">
+      <div v-for="(cert, index) in limitedCertificates" :key="cert.id" class="certificate-card">
         <h3 class="card-title">{{ cert.title }}</h3>
         <p class="card-description">{{ cert.description }}</p>
-
         <button class="learn-more-btn" @click="OpenModal(cert)">Learn More</button>
-
       </div>
     </div>
+
   </section>
 
   <!-- Modal -->
   <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
       <button class="close-btn" @click="closeModal">✕</button>
-      <CertificateDetails :certificates="selectedCertificate" />
+      <CertificateDetails v-if="selectedCertificate" :certificate="selectedCertificate" />
     </div>
   </div>
 
@@ -58,6 +57,13 @@ export default {
       showModal: false,
       selectedCertificate: null,
     };
+  },
+  computed:{
+    
+  limitedCertificates() {
+    // only take the first 4 certificates
+    return this.certificates.slice(0, 4);
+  }
   },
   methods: {
     async getAllCertificates() {
@@ -234,6 +240,7 @@ export default {
     grid-template-columns: 1fr;
   }
 }
+
 .empty-message {
   margin: 0 auto;
   padding: 20px 0;

@@ -8,7 +8,7 @@ import CandidateList from '../components/Pages/CandidateList.vue'
 import NewCandidate from '@/components/Pages/NewCandidate.vue'
 import CertificateList from '@/components/Pages/CertificateList.vue'
 import MyCertificateList from '@/components/Pages/MyCertificateList.vue'
-import Purchase from '@/components/Pages/purchase.vue'
+import Purchase from '@/components/Pages/Purchase.vue'
 
 
 const router = createRouter({
@@ -60,7 +60,6 @@ const router = createRouter({
       path: '/certificateslist',
       component: CertificateList,
       name: 'CertificateList',
-      meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
     {
       path: '/myCertificates',
@@ -69,9 +68,10 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
     {
-      path: '/aa',
+      path: `/PurchaseCertificate/:id`,
       component: Purchase,
-      name: 'aa',
+      name: 'PurchaseCertificate',
+      meta: { requiresAuth: true, roles: ['User', 'Administrator'] }
     },
   ],
 })

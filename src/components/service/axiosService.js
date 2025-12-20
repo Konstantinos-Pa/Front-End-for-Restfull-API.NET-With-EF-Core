@@ -128,5 +128,25 @@ export default {
       throw error;
     }
   },
+  async getCertificatesById(id) {
+    try {
+      const response = await apiClient.get(`/Certificates/${id}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching certificates:', error);
+      throw error;
+    }
+  },
+  async postCandidateCertificate(id,CId) {
+    try {
+      const response = await apiClient.put(`/Candidates/${id}/${CId}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching certificates:', error);
+      throw error;
+    }
+  },
 };
 

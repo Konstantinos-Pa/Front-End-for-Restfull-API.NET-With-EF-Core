@@ -40,19 +40,20 @@
         </div>
       </div>
     </div>
-    <router-link class="action-btn" :to="{ name: 'PurchaseCertificate', params: { certificate } }" >
-          Purchase 
-        </router-link>
+    <router-link v-if="!my" class="action-btn" :to="{ name: 'PurchaseCertificate', params: { id: certificate.id } }">
+      <span>Purchase</span>
+      <span class="price">{{ certificate.price }}$</span>
+    </router-link>
+
   </div>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
 export default {
   name: 'CertificateDetails',
   props: {
-    certificate: { type: Object, required: true }
+    certificate: { type: Object, required: true },
+    my: { type: Boolean, required: false, default: false }
   },
   data() {
     return {
@@ -174,6 +175,7 @@ export default {
     opacity: 0;
     transform: translateY(12px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -191,8 +193,10 @@ export default {
 }
 
 .action-btn {
-  display: inline-block;
-  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
   background-color: #ff3b00;
   color: #fff;
   border-radius: 20px;
@@ -203,8 +207,20 @@ export default {
   transition: background-color 0.2s ease, transform 0.2s ease;
   margin-top: 12px;
 }
+
 .action-btn:hover {
   background-color: #e63400;
   transform: translateY(-2px);
+}
+
+.price {
+  font-weight: 700;
+  margin-left: 16px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
