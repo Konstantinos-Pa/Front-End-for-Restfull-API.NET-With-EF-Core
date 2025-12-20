@@ -179,6 +179,26 @@ export default {
       console.error('Error fetching candidates analytics:', error);
       throw error;
     }
-  }
+  },
+  async getRandomquestions(number){
+
+    try {
+      const response = await apiClient.get(`/questions/Random/${number}`);
+      return response;
+    } 
+    catch (error) {
+      console.error('Error fetching candidates analytics:', error);
+      throw error;
+    }
+  },
+  async putCertificate(Id, Data) {
+    try {
+      const response = await apiClient.put(`/Certificates/${Id}`, Data);
+      return response;
+    } catch (error) {
+      console.error('Error updating candidate:', error);
+      throw error;
+    }
+  },
 };
 

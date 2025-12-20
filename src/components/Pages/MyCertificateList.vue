@@ -48,6 +48,7 @@
         </div>
         <div class="card-actions">
           <button class="btn" @click="OpenModal(cert)">Lern More</button>
+          <button class="btn" disabled>See Certification</button>
         </div>
       </div>
     </div>
@@ -66,7 +67,6 @@
 <script>
 import axiosService from '../service/axiosService';
 import CertificateDetails from './CertificateDetails.vue';
-import Exam from './Exam.vue';
 
 export default {
   components: { CertificateDetails },
@@ -134,13 +134,14 @@ export default {
         this.nextcertificates = allCertificates.filter(cert => {
           const examDate = new Date(cert.examinationDate);
           examDate.setHours(0, 0, 0, 0); // reset time to 00:00:00
-          return examDate >= now;
+          return (examDate >= now) && (cert.maximumScore == 0);
+          console.log(cert.candidateScore);
         });
 
         this.certificates = allCertificates.filter(cert => {
           const examDate = new Date(cert.examinationDate);
           examDate.setHours(0, 0, 0, 0); // reset time to 00:00:00
-          return examDate < now;
+          return (examDate < now) || (cert.candidateScore != 0);
         });
 
       } catch (error) {

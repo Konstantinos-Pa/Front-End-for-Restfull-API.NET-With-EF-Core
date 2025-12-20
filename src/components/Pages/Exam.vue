@@ -2,18 +2,19 @@
     <section class="exam-wrapper">
         <div class="exam-card">
 
-            <div v-for="(question, qIndex) in questions" :key="qIndex" class="question-block">
+            <div v-for="(question, qIndex) in questions" :key="question.id" class="question-block">
                 <h3 class="question-title">
                     Question {{ qIndex + 1 }}
                 </h3>
 
                 <p class="question-text">
-                    {{ question.text }}
+                    {{ question.question }}
                 </p>
 
                 <div class="options">
                     <label v-for="(option, oIndex) in question.options" :key="oIndex" class="option">
-                        <input type="radio" :name="'question-' + qIndex" :value="option" v-model="answers[qIndex]" />
+                        <input type="radio" :name="'question-' + qIndex" :value="oIndex + 1"
+                            v-model="answers[qIndex]" />
                         {{ option }}
                     </label>
                 </div>
@@ -22,37 +23,88 @@
             </div>
 
             <div class="actions">
-                <button class="end-btn" @click="endExam">
-                    END EXAM
-                </button>
-            </div>
+                <div class="actions">
+                    <button class="end-btn" @click="endExam" :disabled="!isExamComplete">
+                        END EXAM
+                    </button>
 
+                </div>
+
+            </div>
         </div>
     </section>
 </template>
 
 <script>
+import axiosService from '../service/axiosService';
+
 export default {
     name: "ExamQuestions",
-    props: {
-        id: null,
-    },
+
     data() {
         return {
-            topics: {
-                questions: [],
-                answers: {},
-            },
+            questions: [],
+            answers: [],
+            correctCount: 0,
+            averageScore: 0,
         };
     },
+    computed: {
+        isExamComplete() {
+            return !this.answers.includes(null);
+        },
+    },
+
+    async created() {
+        const response = await axiosService.getRandomquestions(5);
+
+        this.questions = response.data.map(q => ({
+            id: q.id,
+            question: q.question,
+            correct: q.correct, // assumed 1–4
+            options: [q.answer1, q.answer2, q.answer3, q.answer4],
+        }));
+
+        // Pre-fill answers array
+        this.answers = new Array(this.questions.length).fill(null);
+    },
+
     methods: {
         endExam() {
-            console.log("User answers:", this.answers);
-            // emit / route / api call here
-        }
-    }
+            // ❗ Check if all questions are answered
+            if (this.answers.includes(null)) {
+                alert("Please answer all questions before ending the exam.");
+                return;
+            }
+
+            let correct = 0;
+
+            this.questions.forEach((q, index) => {
+                if (this.answers[index] === q.correct) {
+                    correct++;
+                }
+            });
+
+            this.correctCount = correct;
+            this.averageScore = Math.round(
+                (correct / this.questions.length) * 100
+            );
+
+            this.$router.replace({
+                name: 'Results',
+                params: {
+                    id: this.$route.params.id,
+                    averageScore: this.averageScore,
+                    correctCount: this.correctCount,
+                    questionAmount: this.questions.length,
+                },
+            });
+        },
+    },
 };
 </script>
+
+
 
 <style scoped>
 .exam-wrapper {
@@ -124,4 +176,10 @@ hr {
 .end-btn:hover {
     opacity: 0.9;
 }
+.end-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 </style>
