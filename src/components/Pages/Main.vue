@@ -23,7 +23,7 @@
         </div>
         <MyCertificateList :flag="true" />
         <h1>
-            Favorite Certification worldwide
+            Most Popular Certificates
         </h1>
         <CertificateList :most="[2, 3]" />
 

@@ -22,7 +22,7 @@
             @click.native.prevent="!isExamAvailable(cert.examinationDate)">
             <span>Take exam</span>
           </router-link>
-          <button class="btn" @click="OpenModal(cert)">Lern More</button>
+          <button class="btn" @click="OpenModal(cert)">Learn More</button>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="card-actions">
-          <button class="btn" @click="OpenModal(cert)">Lern More</button>
+          <button class="btn" @click="OpenModal(cert)">Learn More</button>
           <button class="btn" disabled>See Certification</button>
         </div>
       </div>
