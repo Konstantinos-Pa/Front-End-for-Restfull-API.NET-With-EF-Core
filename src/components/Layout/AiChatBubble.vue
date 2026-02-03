@@ -33,54 +33,73 @@
   </button>
 </template>
 
-<script setup>
+<script>
 import { ref, nextTick } from "vue";
+import axiosService from '../service/axiosService';
 
-const isOpen = ref(false);
-const input = ref("");
+export default {
+  setup() {
+    const isOpen = ref(false);
+    const input = ref("");
 
-const messages = ref([
-  {
-    sender: "assistant",
-    text: "Hi 👋 I’m your AI Assistant. How can I help you today?",
+    const messages = ref([
+      {
+        sender: "assistant",
+        text: "Hi 👋 I’m your AI Assistant. How can I help you today?",
+      },
+    ]);
+
+    const toggleChat = () => {
+      isOpen.value = !isOpen.value;
+    };
+
+    const scrollToBottom = async () => {
+      await nextTick();
+      const chatBody = document.querySelector(".chat-body");
+      if (chatBody) {
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+    };
+
+    const sendMessage = async () => {
+      if (!input.value.trim()) return;
+
+      // User message
+      messages.value.push({
+        sender: "user",
+        text: input.value,
+      });
+
+      input.value = "";
+      await scrollToBottom();
+
+      // AI reply
+      setTimeout(async () => {
+        const reply = await axiosService.postAichat(
+          messages.value.at(-1).text,
+          messages.value.length === 2 ? 0 : 1
+        );
+
+        messages.value.push({
+          sender: "assistant",
+          text: reply,
+        });
+
+        await scrollToBottom();
+      }, 600);
+    };
+
+    return {
+      isOpen,
+      input,
+      messages,
+      toggleChat,
+      sendMessage,
+    };
   },
-]);
-
-const toggleChat = () => {
-  isOpen.value = !isOpen.value;
-};
-
-const sendMessage = async () => {
-  if (!input.value.trim()) return;
-
-  // User message
-  messages.value.push({
-    sender: "user",
-    text: input.value,
-  });
-
-  input.value = "";
-  await scrollToBottom();
-
-  // Example AI reply (string)
-  setTimeout(async () => {
-    messages.value.push({
-      sender: "assistant",
-      text: "Got it! Let me help you with that.",
-    });
-
-    await scrollToBottom();
-  }, 600);
-};
-
-const scrollToBottom = async () => {
-  await nextTick();
-  const chatBody = document.querySelector(".chat-body");
-  if (chatBody) {
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
 };
 </script>
+
 
 <style scoped>
 /* Floating bubble */

@@ -200,5 +200,14 @@ export default {
       throw error;
     }
   },
+  async postAichat(string, conversation) {
+    try {
+      const response = await apiClient.post(`/AiRoutingChat/${conversation}`,  string);
+      return response;
+    } catch (error) {
+      console.error('Error posting AI chat:', error);
+      throw error;
+    }
+  },
 };
 
