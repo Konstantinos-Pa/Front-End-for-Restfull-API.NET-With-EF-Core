@@ -1,4 +1,5 @@
 import axios from 'axios';
+const TOKEN_STORAGE_KEY = "token";
 
 const apiClient = axios.create({
   baseURL: 'https://localhost:7228/api',
@@ -6,6 +7,44 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// ---- Token helpers ----
+export const authToken = {
+  get() {
+    return localStorage.getItem(TOKEN_STORAGE_KEY) || "";
+  },
+  set(token) {
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+  },
+  clear() {
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+  },
+};
+
+// ---- Attach JWT Bearer token to every request ----
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = authToken.get();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// ---- Global response interceptor for error logging ----
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Optional: clear token on unauthorized
+    if (error.response?.status === 401) {
+      authToken.clear();
+    }
+    console.error("API call error:", error.response || error.message);
+    return Promise.reject(error);
+  }
+);
 
 //Global response interceptor for error logging
 apiClient.interceptors.response.use(

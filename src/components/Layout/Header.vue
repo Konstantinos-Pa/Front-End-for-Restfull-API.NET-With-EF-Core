@@ -79,11 +79,12 @@
 
 <script>
 import Logo from "../icons/Logo-PC.png";
+import {authToken} from "../service/axiosService";
 
 export default {
   data() {
     return {
-      token: localStorage.getItem("token") || "",
+      token: authToken.get(),
       Logo,
       parsed: null, // initialize parsed as null
     };
@@ -107,7 +108,7 @@ export default {
   },
   methods: {
     logout() {
-      localStorage.removeItem("token");
+      authToken.clear();
       this.token = "";
       this.parsed = null;
       this.$router.push("/").then(() => {

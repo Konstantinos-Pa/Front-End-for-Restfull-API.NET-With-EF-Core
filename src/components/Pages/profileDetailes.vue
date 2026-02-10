@@ -137,11 +137,12 @@
 
 <script>
 import axiosService from '../service/axiosService';
+import {authToken} from "../service/axiosService";
 
 export default {
   data() {
     return {
-      token: localStorage.getItem('token') || '',
+      token: authToken.get(),
       parsed: null,
       candidateDetails: null,
       isModalOpen: false,

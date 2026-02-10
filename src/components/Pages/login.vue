@@ -39,6 +39,7 @@
 
 <script>
 import axiosService from '../service/axiosService';
+import {authToken} from "../service/axiosService";
 export default {
     data() {
         return {
@@ -67,8 +68,8 @@ export default {
             };
             try {
                 const response = await axiosService.Login(payload);
-                this.token = response.data.token.result;
-                localStorage.setItem('token', this.token);
+                this.token = response.data.token.result; 
+                authToken.set(this.token);
                 if (this.token) {
                     this.$router.push('/').then(() => {
                         window.location.reload(); // reload the page if really needed

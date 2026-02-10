@@ -34,7 +34,6 @@
 import Main from "../icons/portrait-successful-business-woman-using-digital-tablet.jpg"
 import CertificateList from "./CertificateList.vue";
 import MyCertificateList from "./MyCertificateList.vue";
-let token = localStorage.getItem("token") || "";
 </script>
 
 <style scoped>

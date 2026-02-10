@@ -77,13 +77,14 @@
 
 <script>
 import axiosService from '../service/axiosService';
+import {authToken} from "../service/axiosService";
 
 export default {
   name: 'PurchaseCertificate',
   data() {
     return {
       certificate: null,
-      token: localStorage.getItem("token") || "",
+      token: authToken.get(),
       parsed: null, // initialize parsed as null
       candidate: null,
       showModal: false, // controls PayPal modal visibility

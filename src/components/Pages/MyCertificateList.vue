@@ -66,6 +66,7 @@
 
 <script>
 import axiosService from '../service/axiosService';
+import {authToken} from "../service/axiosService";
 import CertificateDetails from './CertificateDetails.vue';
 
 export default {
@@ -80,7 +81,7 @@ export default {
       loading: true,
       showModal: false,
       selectedCertificate: null,
-      token: localStorage.getItem("token") || "",
+      token: authToken.get(),
       parsed: null,
       candidateDetails: null
     };
