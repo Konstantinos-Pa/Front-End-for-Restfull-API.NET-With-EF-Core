@@ -46,15 +46,6 @@ apiClient.interceptors.response.use(
   }
 );
 
-//Global response interceptor for error logging
-apiClient.interceptors.response.use(
-  response => response,
-  error => {
-    console.error('API call error:', error.response || error.message);
-    return Promise.reject(error);
-  }
-);
-
 export default {
   async getAllCertificates() {
     try {
@@ -249,4 +240,5 @@ export default {
     }
   },
 };
+
 
