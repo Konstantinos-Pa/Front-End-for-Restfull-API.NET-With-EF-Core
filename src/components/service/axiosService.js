@@ -46,6 +46,7 @@ apiClient.interceptors.response.use(
   }
 );
 
+
 export default {
   async getAllCertificates() {
     try {
@@ -103,9 +104,9 @@ export default {
       throw error;
     }
   },
-  async getCertificatesOfCandidate(id) {
+  async getCertificatesOfCandidate(CandidateId) {
     try {
-      const response = await apiClient.get(`Candidates/CertificatesOfCandidate/${id}`);
+      const response = await apiClient.get(`Certificates/Candidate/${CandidateId}`);
       return response;
     } catch (error) {
       console.error('Error fetching certificates:', error);
@@ -148,16 +149,6 @@ export default {
       throw error;
     }
   },
-  async getCandidateCertificates(CandidateId) {
-    try {
-      const response = await apiClient.get(`/Candidates/CertificatesOfCandidate/${CandidateId}`);
-      return response;
-    } 
-    catch (error) {
-      console.error('Error fetching certificates:', error);
-      throw error;
-    }
-  },
   async getCertificatesById(id) {
     try {
       const response = await apiClient.get(`/Certificates/${id}`);
@@ -170,7 +161,7 @@ export default {
   },
   async postCandidateCertificate(id,CId) {
     try {
-      const response = await apiClient.put(`/Candidates/${id}/${CId}`);
+      const response = await apiClient.post(`Certificate/CertificatesFromSale/${id}/${CId}`);
       return response;
     } 
     catch (error) {
@@ -240,5 +231,4 @@ export default {
     }
   },
 };
-
 

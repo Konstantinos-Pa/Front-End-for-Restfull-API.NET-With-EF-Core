@@ -127,7 +127,7 @@ export default {
     },
     async getCandidateCertificates() {
       try {
-        const response = await axiosService.getCandidateCertificates(this.candidateDetails.id);
+        const response = await axiosService.getCertificatesOfCandidate(this.candidateDetails.id);
         const allCertificates = response.data;
         const now = new Date();
         now.setHours(0, 0, 0, 0); // reset time to 00:00:00
